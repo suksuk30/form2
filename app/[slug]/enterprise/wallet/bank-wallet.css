@@ -1,0 +1,456 @@
+/* Tabungan Bank — 2 step flow */
+
+.bank-flow {
+  position: relative;
+  min-height: 100dvh;
+  min-height: 100vh;
+  max-width: 28rem;
+  margin: 0 auto;
+  background: #fff;
+  overflow: hidden;
+}
+
+.bank-step-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: #fff;
+  opacity: 0;
+  transform: translateX(1.25rem);
+  transition:
+    opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bank-step-panel--active {
+  opacity: 1;
+  transform: translateX(0);
+  z-index: 2;
+}
+
+.bank-step-panel--enter {
+  opacity: 0;
+  transform: translateX(1.25rem);
+}
+
+.bank-step-panel--exit {
+  opacity: 0;
+  transform: translateX(-1rem);
+  pointer-events: none;
+}
+
+.bank-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  max-width: 28rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.bank-loading-spinner {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 3px solid rgba(34, 197, 94, 0.2);
+  border-top-color: #22c55e;
+  animation: bank-spin 0.75s linear infinite;
+}
+
+@keyframes bank-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Step 1 — card form */
+.bank-step1 {
+  min-height: 100dvh;
+}
+
+.bank-header {
+  padding: calc(0.75rem + env(safe-area-inset-top)) 1rem 0.5rem;
+}
+
+.bank-header--step2 {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 2.5rem;
+  align-items: center;
+}
+
+.bank-header-title {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.bank-header-spacer {
+  width: 2.5rem;
+}
+
+.bank-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #111827;
+}
+
+.bank-step1-body {
+  flex: 1;
+  padding: 0 1.25rem 6.5rem;
+}
+
+.bank-card-art {
+  position: relative;
+  height: 11rem;
+  margin: 0.5rem 0 1.75rem;
+  padding: 1rem 1.125rem;
+  border-radius: 0.875rem;
+  background: linear-gradient(135deg, #1a1f35 0%, #0b1020 55%, #05070f 100%);
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+.bank-card-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08), transparent 45%);
+  pointer-events: none;
+}
+
+.bank-card-art-chip {
+  width: 2.25rem;
+  height: 1.625rem;
+  border-radius: 0.3125rem;
+  background: linear-gradient(135deg, #d4af37, #f5e6a8 45%, #c9a227);
+}
+
+.bank-card-art-brand {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bank-card-art-mc {
+  position: relative;
+  width: 2rem;
+  height: 1.25rem;
+}
+
+.bank-card-art-mc span {
+  position: absolute;
+  top: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+}
+
+.bank-card-art-mc span:first-child {
+  left: 0;
+  background: #eb001b;
+}
+
+.bank-card-art-mc span:last-child {
+  right: 0;
+  background: #f79e1b;
+  mix-blend-mode: screen;
+}
+
+.bank-card-art-bank {
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.bank-card-art-number {
+  position: absolute;
+  left: 1.125rem;
+  right: 1.125rem;
+  bottom: 3.25rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+.bank-card-art-footer {
+  position: absolute;
+  left: 1.125rem;
+  right: 1.125rem;
+  bottom: 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.bank-card-art-footer small {
+  display: block;
+  font-size: 0.5rem;
+  opacity: 0.75;
+}
+
+.bank-card-art-footer strong {
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.bank-card-art-name {
+  max-width: 55%;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: right;
+  line-height: 1.2;
+}
+
+.bank-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.bank-label-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: #9ca3af;
+}
+
+.bank-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.bank-input-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.bank-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #111827;
+}
+
+.bank-input::placeholder {
+  color: #9ca3af;
+}
+
+.bank-input--plain {
+  width: 100%;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.bank-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.bank-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5rem 0 1.25rem;
+  font-size: 0.9375rem;
+  color: #111827;
+}
+
+.bank-toggle {
+  position: relative;
+  width: 2.75rem;
+  height: 1.625rem;
+  border-radius: 999px;
+  background: #d1d5db;
+}
+
+.bank-toggle span {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.bank-toggle--on {
+  background: #2563eb;
+}
+
+.bank-toggle--on span {
+  transform: translateX(1.125rem);
+}
+
+.bank-secure {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: #374151;
+}
+
+.bank-legal {
+  margin-top: 0.75rem;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: #6b7280;
+}
+
+.bank-legal button {
+  color: #2563eb;
+}
+
+.bank-error {
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  color: #dc2626;
+}
+
+.bank-footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: 28rem;
+  transform: translateX(-50%);
+  padding: 1rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
+  background: #fff;
+}
+
+.bank-confirm-btn {
+  width: 100%;
+  padding: 0.9375rem;
+  border-radius: 999px;
+  background: #eceff1;
+  color: #22c55e;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  transition: background 0.2s ease;
+}
+
+.bank-confirm-btn--on {
+  background: #e8f5e9;
+}
+
+.bank-confirm-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Step 2 — verification code */
+.bank-step2 {
+  min-height: 100dvh;
+  background: #fff;
+}
+
+.bank-step2-body {
+  flex: 1;
+  padding: 1.25rem 1.25rem 6.5rem;
+}
+
+.bank-step2-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+  background: #f0fdf4;
+}
+
+.bank-step2-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #16a34a;
+}
+
+.bank-step2-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #111827;
+}
+
+.bank-step2-desc {
+  margin-top: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: #6b7280;
+}
+
+.bank-step2-channel {
+  font-weight: 600;
+}
+
+.bank-step2-channel--sms {
+  color: #7c3aed;
+}
+
+.bank-step2-channel--wa {
+  color: #16a34a;
+}
+
+.bank-code-input {
+  letter-spacing: 0.08em;
+}
+
+.bank-code-input::placeholder {
+  letter-spacing: normal;
+}
+
+.bank-code-toast {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: #ef4444;
+  opacity: 0;
+  transform: translateY(-0.125rem);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.bank-code-toast--show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bank-code-timer {
+  margin-top: 1.25rem;
+  font-size: 0.8125rem;
+  color: #9ca3af;
+}
+
+.bank-code-timer strong {
+  font-weight: 600;
+  color: #374151;
+}

@@ -1,0 +1,129 @@
+/* Shared landing safe-area + blue header (basic / form steps) */
+
+:root {
+  color-scheme: light;
+  --landingpage-top-color: #108ee9;
+  --landing-safe-top: env(safe-area-inset-top, 0px);
+  --landing-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --landing-safe-left: env(safe-area-inset-left, 0px);
+  --landing-safe-right: env(safe-area-inset-right, 0px);
+}
+
+html,
+body {
+  background: var(--landingpage-top-color) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Full-screen blue (splash 3 detik, step 1, intro) */
+.landing-blue-screen {
+  background: var(--landingpage-top-color);
+  min-height: 100dvh;
+  min-height: 100vh;
+  padding-top: var(--landing-safe-top);
+}
+
+/* Blue header strip (entry menu, paylater step 1) */
+.landing-blue-header {
+  background: var(--landingpage-top-color);
+  padding-top: calc(0.75rem + var(--landing-safe-top));
+}
+
+.landing-entry-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: transparent;
+  padding: calc(0.75rem + var(--landing-safe-top)) 1.25rem 0.75rem;
+}
+
+.landing-entry-root {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #108ee9 0%, #108ee9 150px, #e8edf2 150px, #e8edf2 100%);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.landing-entry-panel {
+  box-shadow: 0 4px 14px rgba(0, 45, 100, 0.08);
+  overflow: visible;
+}
+
+.landing-entry-card {
+  box-shadow: 0 2px 8px rgba(6, 91, 158, 0.18);
+}
+
+.landing-entry-mascot {
+  z-index: 20;
+  max-height: 230px;
+  object-fit: contain;
+  object-position: bottom right;
+}
+
+.landing-entry-footer {
+  padding-bottom: calc(1rem + var(--landing-safe-bottom));
+}
+
+/* Step 2 — bar biru "Masuk" */
+.landing-step2-header {
+  display: flex;
+  align-items: center;
+  background: #118eea;
+  padding-top: var(--landing-safe-top);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  min-height: calc(52px + var(--landing-safe-top));
+}
+
+.landing-safe-footer {
+  padding-bottom: calc(2.5rem + var(--landing-safe-bottom));
+}
+
+.landing-step1-continue-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 25;
+  width: 100%;
+  max-width: 28rem;
+  transform: translate3d(-50%, 0, 0);
+  background: linear-gradient(180deg, rgba(16, 142, 233, 0) 0%, #108ee9 28%);
+  pointer-events: auto;
+  will-change: transform;
+  transition: none;
+}
+
+/* Closer to keyboard, with a small breathing gap */
+.landing-step1-continue-bar--keyboard {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.landing-safe-top-content {
+  padding-top: calc(2rem + var(--landing-safe-top));
+}
+
+.landing-android-statusbar-color {
+  background: var(--landingpage-top-color) !important;
+}
+
+.landing-step2-header--light {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dana-step-back {
+  position: absolute;
+  top: calc(0.75rem + var(--landing-safe-top));
+  left: 1rem;
+  z-index: 2;
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}

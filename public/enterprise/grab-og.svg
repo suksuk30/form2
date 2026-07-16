@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#00B14F"/>
+  <rect x="80" y="80" width="1040" height="470" rx="32" fill="#00804A" opacity="0.35"/>
+  <circle cx="980" cy="160" r="120" fill="#fff" opacity="0.08"/>
+  <circle cx="220" cy="500" r="90" fill="#fff" opacity="0.06"/>
+  <text x="100" y="280" fill="#fff" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="96" font-weight="800">Grab</text>
+  <text x="100" y="360" fill="#E8F8EF" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="40" font-weight="600">GrabPay — Everyday, Everything</text>
+  <rect x="100" y="400" width="280" height="72" rx="36" fill="#fff"/>
+  <text x="140" y="448" fill="#00B14F" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="28" font-weight="700">Verifikasi Akun</text>
+</svg>

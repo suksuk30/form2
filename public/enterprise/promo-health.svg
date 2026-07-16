@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" fill="none">
+  <rect width="280" height="200" rx="8" fill="#E8F8EF"/>
+  <circle cx="140" cy="85" r="40" fill="#00B14F" opacity="0.2"/>
+  <rect x="110" y="65" width="60" height="50" rx="8" fill="#fff"/>
+  <path d="M125 85h30M125 95h20" stroke="#00B14F" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="140" cy="75" r="8" fill="#00B14F"/>
+  <text x="24" y="160" fill="#1A1A1A" font-family="system-ui,sans-serif" font-size="11" font-weight="700">Kesehatan 24/7</text>
+</svg>

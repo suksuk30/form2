@@ -1,0 +1,275 @@
+/* Standard landing — DANA CICIL flow transitions */
+
+.standard-dana-root {
+  --dana-blue: #108ee9;
+  --dana-blue-dark: #065b9e;
+  --dana-blue-light: #3ba5f0;
+  --dana-bg: #f5f7fa;
+  --dana-gold: #f5c451;
+  --standard-safe-top: env(safe-area-inset-top, 0px);
+  --standard-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --standard-safe-left: env(safe-area-inset-left, 0px);
+  --standard-safe-right: env(safe-area-inset-right, 0px);
+}
+
+.standard-splash-screen {
+  padding-top: var(--standard-safe-top);
+  min-height: 100dvh;
+  min-height: 100vh;
+}
+
+.standard-splash-footer {
+  padding-bottom: calc(2.5rem + var(--standard-safe-bottom));
+}
+
+.standard-home-shell {
+  padding-top: var(--standard-safe-top);
+  min-height: 100dvh;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.standard-home-footer {
+  padding-bottom: calc(1.5rem + var(--standard-safe-bottom));
+}
+
+/* Side drawer menu — transform only, lightweight */
+.standard-side-menu-root {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.standard-side-menu-root.is-open {
+  pointer-events: auto;
+}
+
+.standard-side-menu-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+
+.standard-side-menu-root.is-open .standard-side-menu-backdrop {
+  opacity: 1;
+}
+
+.standard-side-menu-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(68%, 240px);
+  height: 100%;
+  background: #fff;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  padding-top: var(--standard-safe-top);
+  padding-bottom: var(--standard-safe-bottom);
+  transform: translate3d(100%, 0, 0);
+  transition: transform 0.28s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.standard-side-menu-root.is-open .standard-side-menu-panel {
+  transform: translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .standard-side-menu-backdrop,
+  .standard-side-menu-panel {
+    transition: none !important;
+  }
+}
+
+.standard-hero-bg {
+  background: linear-gradient(165deg, #055a9c 0%, #108ee9 48%, #1a9aef 100%);
+}
+
+.standard-home-card {
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 45, 100, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.standard-btn-primary {
+  background: #108ee9;
+  box-shadow: 0 3px 10px rgba(16, 142, 233, 0.35);
+}
+
+.standard-inner-panel {
+  background: linear-gradient(145deg, #1a9aef 0%, #108ee9 55%, #066fb8 100%);
+}
+
+.standard-badge-gold {
+  background: linear-gradient(135deg, #f5c451 0%, #e8a820 100%);
+  color: #5c3d00;
+}
+
+.standard-slide-up-ready {
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.standard-slide-up-enter {
+  animation: standardSlideUp 0.34s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  contain: layout paint;
+}
+
+.standard-paylater-backdrop-enter {
+  animation: standardBackdropFade 0.2s ease-out forwards;
+  will-change: opacity;
+}
+
+.standard-paylater-panel-enter {
+  animation: standardPaylaterCenterIn 0.28s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@keyframes standardBackdropFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes standardPaylaterCenterIn {
+  from {
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes standardPaylaterSlideUp {
+  from {
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.standard-crossfade-enter {
+  animation: standardCrossfade 0.42s ease-out forwards;
+  will-change: opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Transform-only slide — avoids opacity paints that stutter on mid/low-end phones */
+@keyframes standardSlideUp {
+  from {
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes standardCrossfade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.standard-cicil-scroll {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: calc(2rem + var(--standard-safe-bottom));
+}
+
+/* Cicil screen — lighter paints for smoother slide/scroll on mobile */
+.standard-cicil-header {
+  padding-top: calc(0.75rem + var(--standard-safe-top));
+  background: linear-gradient(180deg, #1296f0 0%, #108ee9 55%, #0a6eb8 100%);
+  box-shadow: 0 4px 12px rgba(6, 91, 158, 0.22);
+}
+
+.standard-cicil-card-3d {
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+}
+
+.standard-cicil-pill-3d {
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.standard-cicil-btn-3d {
+  background: #108ee9;
+  box-shadow: 0 3px 10px rgba(16, 142, 233, 0.35);
+  border: none;
+}
+
+.standard-cicil-btn-3d:active {
+  box-shadow: 0 1px 4px rgba(16, 142, 233, 0.3);
+  transform: translateY(1px);
+}
+
+.standard-cicil-icon-btn {
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.standard-cicil-merchant-3d {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  border: 1px solid #eee;
+}
+
+.standard-cicil-service-icon {
+  box-shadow: none;
+}
+
+.standard-paylater-slider {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.standard-paylater-slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 9999px;
+  background: #108ee9;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+}
+
+.standard-paylater-slider::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 9999px;
+  background: #108ee9;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+}

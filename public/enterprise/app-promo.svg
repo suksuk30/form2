@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" fill="none">
+  <rect width="400" height="220" rx="12" fill="#F8FAF9"/>
+  <circle cx="80" cy="120" r="28" fill="#FFD4B8"/>
+  <rect x="60" y="145" width="40" height="50" rx="8" fill="#00B14F"/>
+  <circle cx="320" cy="110" r="24" fill="#FFD4B8"/>
+  <rect x="304" y="130" width="32" height="45" rx="6" fill="#FF6B35"/>
+  <rect x="170" y="60" width="70" height="120" rx="12" fill="#1A1A1A"/>
+  <rect x="178" y="72" width="54" height="90" rx="6" fill="#fff"/>
+  <text x="188" y="118" fill="#00B14F" font-family="system-ui,sans-serif" font-size="14" font-weight="800">Grab</text>
+  <rect x="120" y="150" width="50" height="28" rx="6" fill="#00B14F" opacity="0.85"/>
+  <circle cx="145" cy="164" r="8" fill="#fff" opacity="0.5"/>
+  <path d="M250 155h40l-8 20h-24z" fill="#7B61FF"/>
+  <circle cx="258" cy="155" r="10" fill="#374151"/>
+  <path d="M30 80h50v8H30z" fill="#FFB800" opacity="0.6"/>
+  <path d="M340 70l20 15-20 15" fill="#00B14F" opacity="0.4"/>
+</svg>

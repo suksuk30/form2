@@ -1,0 +1,628 @@
+/* OVO wallet flow */
+
+.ovo-flow {
+  position: relative;
+  min-height: 100dvh;
+  min-height: 100vh;
+  max-width: 28rem;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.ovo-flow--fade {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.48s ease;
+}
+
+.ovo-flow--slide {
+  transform: translateY(2rem);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* Splash — splash-ovo background + logo/ilustrasi dari ovo-sol */
+.ovo-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  width: 100%;
+  max-width: 28rem;
+  height: 100dvh;
+  height: 100vh;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #5b3db8;
+  transition: opacity 0.4s ease;
+}
+
+.ovo-splash-bg {
+  object-fit: cover;
+  object-position: center;
+}
+
+.ovo-splash-logo-frame {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  z-index: 2;
+  width: min(82vw, 320px);
+  height: min(44vh, 340px);
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.ovo-splash-logo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 118%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.ovo-splash--hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Step 1 */
+.ovo-step1 {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  background: #fff;
+}
+
+.ovo-step1-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(0.875rem + env(safe-area-inset-top)) 1rem 0.5rem;
+}
+
+.ovo-step1-back,
+.ovo-step1-help {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #111827;
+}
+
+.ovo-step1-help {
+  border-radius: 50%;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ovo-step1-body {
+  flex: 1;
+  padding: 0.5rem 1.25rem 6rem;
+}
+
+.ovo-step1-title {
+  font-size: 1.625rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.ovo-step1-sub {
+  margin-top: 0.625rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+.ovo-step1-phone {
+  display: flex;
+  align-items: center;
+  margin-top: 1.75rem;
+  padding: 0 1rem;
+  min-height: 3.25rem;
+  border-radius: 0.875rem;
+  background: #f3edf9;
+}
+
+.ovo-step1-prefix {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #374151;
+  padding-right: 0.75rem;
+}
+
+.ovo-step1-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-size: 1.0625rem;
+  color: #111827;
+  outline: none;
+  caret-color: #7c3aed;
+}
+
+.ovo-step1-reset {
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.ovo-step1-reset a {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.ovo-step1-footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  z-index: 10;
+  width: 100%;
+  max-width: 28rem;
+  transform: translateX(-50%);
+  padding: 1rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1px solid #f3f4f6;
+}
+
+.ovo-step1-legal {
+  margin-bottom: 0.875rem;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  color: #6b7280;
+  text-align: center;
+}
+
+.ovo-step1-legal a {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.ovo-step1-btn {
+  width: 100%;
+  padding: 0.9375rem;
+  border-radius: 0.875rem;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s;
+}
+
+.ovo-step1-btn--off {
+  background: #e5e7eb;
+  color: #9ca3af;
+}
+
+.ovo-step1-btn--on {
+  background: #7c3aed;
+  color: #fff;
+}
+
+/* Step 2 PIN */
+.ovo-step2 {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  background: #fff;
+}
+
+.ovo-step2-top {
+  padding: calc(0.875rem + env(safe-area-inset-top)) 1rem 0.5rem;
+}
+
+.ovo-step2-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #111827;
+}
+
+.ovo-step2-body {
+  flex: 1;
+  padding: 1.5rem 1.25rem;
+}
+
+.ovo-step2-title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.ovo-step2-pin {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  cursor: text;
+}
+
+.ovo-step2-pin-hidden {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.ovo-step2-pin-ring {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.ovo-step2-pin-ring.filled {
+  border-color: #7c3aed;
+  background: #7c3aed;
+}
+
+.ovo-step2-forgot {
+  position: fixed;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 28rem;
+  padding: 0 1.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.ovo-step2-forgot a {
+  color: #06b6d4;
+  font-weight: 700;
+}
+
+.ovo-step2--dimmed {
+  pointer-events: none;
+}
+
+/* WhatsApp popup */
+.ovo-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  max-width: 28rem;
+  margin: 0 auto;
+  background: rgba(17, 24, 39, 0.45);
+}
+
+.ovo-popup-sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 70;
+  width: 100%;
+  max-width: 28rem;
+  transform: translateX(-50%);
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: #fff;
+  padding: 0.75rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
+  animation: ovoSheetUp 0.35s ease;
+}
+
+@keyframes ovoSheetUp {
+  from { transform: translate(-50%, 100%); }
+  to { transform: translate(-50%, 0); }
+}
+
+.ovo-popup-handle {
+  width: 2.5rem;
+  height: 0.25rem;
+  margin: 0 auto 1rem;
+  border-radius: 9999px;
+  background: #d1d5db;
+}
+
+.ovo-popup-title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.ovo-popup-desc {
+  margin-top: 0.625rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+.ovo-popup-desc strong {
+  color: #111827;
+}
+
+.ovo-popup-info {
+  display: flex;
+  gap: 0.625rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background: #ecfdf5;
+}
+
+.ovo-popup-info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #10b981;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 800;
+}
+
+.ovo-popup-info p {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #047857;
+}
+
+.ovo-popup-wa-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0.9375rem;
+  border-radius: 0.875rem;
+  background: #7c3aed;
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.ovo-popup-sms {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.ovo-popup-sms button {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* Step 3 OTP */
+.ovo-step3 {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  background: #fff;
+}
+
+.ovo-step3-top {
+  padding: calc(0.875rem + env(safe-area-inset-top)) 1rem 0.5rem;
+}
+
+.ovo-step3-body {
+  flex: 1;
+  padding: 1rem 1.25rem 2rem;
+}
+
+.ovo-step3-title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.ovo-step3-sub {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+.ovo-step3-sub strong {
+  color: #111827;
+}
+
+.ovo-step3-otp {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.ovo-step3-otp input {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  border: 2px solid #e5e7eb;
+  background: #f9fafb;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  outline: none;
+}
+
+.ovo-step3-otp input:focus {
+  border-color: #7c3aed;
+  background: #fff;
+}
+
+.ovo-step3-otp input.error {
+  border-color: #ef4444;
+}
+
+.ovo-step3-toast {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #dc2626;
+  opacity: 0;
+}
+
+.ovo-step3-toast.show {
+  opacity: 1;
+}
+
+.ovo-step3-resend {
+  margin-top: 1.25rem;
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.ovo-step3-resend button {
+  color: #7c3aed;
+  font-weight: 700;
+}
+
+.ovo-error {
+  margin-top: 1rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.5rem;
+  background: #fef2f2;
+  font-size: 0.75rem;
+  color: #dc2626;
+}
+
+.ovo-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.ovo-loading-backdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(23, 20, 33, 0.45);
+}
+
+/* Kartu putih */
+.ovo-loading-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(23, 20, 33, 0.25);
+  animation: ovo-load-card-in 0.28s ease-out;
+}
+
+@keyframes ovo-load-card-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Titik-titik ungu yang menyatu */
+.ovo-load-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ovo-load-dot {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 9999px;
+  background: #7828c8;
+}
+
+.ovo-load-dot:nth-child(1) {
+  animation: ovo-load-dot-left 0.62s ease-in-out infinite;
+}
+
+.ovo-load-dot:nth-child(2) {
+  animation: ovo-load-dot-mid 0.62s ease-in-out infinite;
+}
+
+.ovo-load-dot:nth-child(3) {
+  animation: ovo-load-dot-right 0.62s ease-in-out infinite;
+}
+
+@keyframes ovo-load-dot-left {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(1.375rem);
+  }
+}
+
+@keyframes ovo-load-dot-right {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-1.375rem);
+  }
+}
+
+@keyframes ovo-load-dot-mid {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* Sukses: lingkaran hijau + centang */
+.ovo-load-check {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.ovo-load-check-circle {
+  fill: #00b14f;
+  transform-origin: center;
+  animation: ovo-load-circle-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.ovo-load-check-mark {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 42;
+  stroke-dashoffset: 42;
+  animation: ovo-load-check-draw 0.4s ease-out 0.28s both;
+}
+
+@keyframes ovo-load-circle-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ovo-load-check-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

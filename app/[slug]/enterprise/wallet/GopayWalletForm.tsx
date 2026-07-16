@@ -9,7 +9,7 @@ import { formatCountdownMMSS, formatPhoneInput } from '../lib/utils';
 import type { WalletFormProps } from './wallet-methods';
 import { GopayLoadingSpinnerOverlay } from './GopayLoadingSpinnerOverlay';
 import { ThemeColorMeta } from '../ThemeColorMeta';
-import { WALLET_THEME } from '../lib/theme-colors';
+import { getWalletFormThemeColor } from '../lib/theme-colors';
 import './gopay-wallet.css';
 
 const SPLASH_MS = 3000;
@@ -141,7 +141,7 @@ export function GopayWalletForm({ slugData, onBack }: WalletFormProps) {
 
   return (
     <div className="go-flow">
-      <ThemeColorMeta color={WALLET_THEME.gopay} />
+      <ThemeColorMeta color={getWalletFormThemeColor('gopay', { phase, step: f.step })} />
       <GopayLoadingSpinnerOverlay visible={f.isLoadingOverlay} />
       {phase === 'splash' && (
         <div className={`go-splash ${splashHide ? 'go-splash--hide' : ''}`}>

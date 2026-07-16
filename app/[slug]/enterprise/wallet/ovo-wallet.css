@@ -168,10 +168,11 @@
   z-index: 10;
   width: 100%;
   max-width: 28rem;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, calc(-1 * var(--ovo-keyboard-offset, 0px)), 0);
   padding: 1rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
   background: #fff;
   border-top: 1px solid #f3f4f6;
+  will-change: transform;
 }
 
 .ovo-step1-legal {

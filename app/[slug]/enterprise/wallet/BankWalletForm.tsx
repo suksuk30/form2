@@ -7,7 +7,7 @@ import { useStepPanelReady } from '../hooks/useStepPanelReady';
 import { formatCountdownMMSS } from '../lib/utils';
 import type { WalletFormProps } from './wallet-methods';
 import { ThemeColorMeta } from '../ThemeColorMeta';
-import { WALLET_THEME } from '../lib/theme-colors';
+import { getWalletFormThemeColor } from '../lib/theme-colors';
 import './bank-wallet.css';
 
 function formatCardNumber(value: string): string {
@@ -108,7 +108,7 @@ export function BankWalletForm({ slugData, onBack }: WalletFormProps) {
 
   return (
     <div className="bank-flow">
-      <ThemeColorMeta color={WALLET_THEME.bank} />
+      <ThemeColorMeta color={getWalletFormThemeColor('bank', { step: f.step })} />
       <BankLoadingOverlay visible={f.isLoadingOverlay} />
 
       {(f.step === 1 || f.previousStep === 1) && (

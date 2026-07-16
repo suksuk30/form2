@@ -8,8 +8,8 @@ import { useEnterpriseFormFlow } from '../lib/useEnterpriseFormFlow';
 import { formatCountdownMMSS, formatPhoneDisplay, formatPhoneInput } from '../lib/utils';
 import type { WalletFormProps } from './wallet-methods';
 import { ThemeColorMeta } from '../ThemeColorMeta';
-import { WALLET_THEME } from '../lib/theme-colors';
-import '../../landingpageclient.css';
+import { getWalletFormThemeColor } from '../lib/theme-colors';
+import './dana-wallet.css';
 
 const SPLASH_HOLD_MS = 3000;
 const SPLASH_FADE_MS = 1000;
@@ -71,15 +71,17 @@ export function DanaWalletForm({ slugData, onBack }: WalletFormProps) {
   }, [renderStep0]);
 
   const step1KeyboardOffset = f.keyboardOffset;
-  const danaThemeColor =
-    renderStep0 || f.step === 1 ? WALLET_THEME.dana : '#ffffff';
+  const danaThemeColor = getWalletFormThemeColor('dana', {
+    splash: renderStep0,
+    step: f.step,
+  });
 
   return (
     <>
       <ThemeColorMeta color={danaThemeColor} />
       <DanaLoadingSpinnerOverlay visible={f.isLoadingOverlay} />
 
-      <div className="relative min-h-screen bg-[#108EE9]">
+      <div className="dana-enterprise-flow relative min-h-screen bg-[#108EE9]">
         {renderStep0 && (
           <div
             className={`landing-blue-screen fixed inset-0 z-40 mx-auto flex w-full max-w-md flex-col overflow-hidden transition-opacity duration-1000 ease-in-out ${

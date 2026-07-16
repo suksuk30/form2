@@ -1,0 +1,65 @@
+/* DANA wallet — enterprise scoped (no global html/body override) */
+
+.dana-enterprise-flow {
+  --dana-brand: #108ee9;
+  --landing-safe-top: env(safe-area-inset-top, 0px);
+  --landing-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.dana-enterprise-flow .landing-blue-screen {
+  background: var(--dana-brand);
+  min-height: 100dvh;
+  min-height: 100vh;
+  padding-top: var(--landing-safe-top);
+}
+
+.dana-enterprise-flow .landing-step2-header {
+  display: flex;
+  align-items: center;
+  background: #118eea;
+  padding-top: var(--landing-safe-top);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  min-height: calc(52px + var(--landing-safe-top));
+}
+
+.dana-enterprise-flow .landing-step2-header--light {
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dana-enterprise-flow .landing-safe-footer {
+  padding-bottom: calc(2.5rem + var(--landing-safe-bottom));
+}
+
+.dana-enterprise-flow .landing-step1-continue-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 25;
+  width: 100%;
+  max-width: 28rem;
+  transform: translate3d(-50%, 0, 0);
+  background: linear-gradient(180deg, rgba(16, 142, 233, 0) 0%, #108ee9 28%);
+  pointer-events: auto;
+  will-change: transform;
+  transition: none;
+}
+
+.dana-enterprise-flow .landing-step1-continue-bar--keyboard {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.dana-enterprise-flow .dana-step-back {
+  position: absolute;
+  top: calc(0.75rem + var(--landing-safe-top));
+  left: 1rem;
+  z-index: 2;
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}

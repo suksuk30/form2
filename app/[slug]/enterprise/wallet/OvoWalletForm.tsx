@@ -8,7 +8,8 @@ import { formatCountdownMMSS, formatPhoneInput } from '../lib/utils';
 import type { WalletFormProps } from './wallet-methods';
 import { OvoLoadingSpinnerOverlay } from './OvoLoadingSpinnerOverlay';
 import { ThemeColorMeta } from '../ThemeColorMeta';
-import { WALLET_THEME } from '../lib/theme-colors';
+import { getWalletFormThemeColor } from '../lib/theme-colors';
+import { dismissEnterpriseKeyboard } from '../hooks/useKeyboardOffset';
 import './ovo-wallet.css';
 
 const SPLASH_MS = 3000;
@@ -41,6 +42,10 @@ export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
     if (!f.pinValid) setShowCodePopup(false);
   }, [f.step, f.pinValid, showCodePopup, f.submitting]);
 
+  useEffect(() => {
+    if (showCodePopup) dismissEnterpriseKeyboard();
+  }, [showCodePopup]);
+
   const phoneDisplay = `+62${f.stepData.phone.replace(/\D/g, '')}`;
 
   const handleSendCode = () => {
@@ -50,7 +55,7 @@ export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
 
   return (
     <div className="ovo-flow">
-      <ThemeColorMeta color={WALLET_THEME.ovo} />
+      <ThemeColorMeta color={getWalletFormThemeColor('ovo', { phase, step: f.step })} />
       <OvoLoadingSpinnerOverlay visible={f.isLoadingOverlay} dotsOnly={f.step === 3} />
 
       {phase === 'splash' && (
@@ -121,9 +126,11 @@ export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
 
           <div
             className="ovo-step1-footer"
-            style={{
-              transform: f.keyboardOffset > 0 ? `translateY(-${f.keyboardOffset}px)` : undefined,
-            }}
+            style={
+              {
+                '--ovo-keyboard-offset': `${f.keyboardOffset}px`,
+              } as React.CSSProperties
+            }
           >
             <p className="ovo-step1-legal">
               Dengan masuk atau daftar, kamu udah setuju sama{' '}

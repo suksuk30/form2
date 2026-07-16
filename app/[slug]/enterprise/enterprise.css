@@ -36,6 +36,36 @@
   pointer-events: none;
 }
 
+/* Area home indicator / notch bawah — warna mengikuti form aktif */
+.enterprise-root::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  height: var(--grab-safe-bottom);
+  background: var(--enterprise-theme-color, var(--grab-bg));
+  pointer-events: none;
+}
+
+html.enterprise-shell,
+html.enterprise-shell body {
+  background: var(--enterprise-theme-color, var(--grab-bg)) !important;
+}
+
+html.enterprise-shell::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  height: var(--grab-safe-bottom);
+  background: var(--enterprise-theme-color, var(--grab-bg));
+  pointer-events: none;
+}
+
 .enterprise-screen,
 .enterprise-crossfade-underlay {
   position: relative;

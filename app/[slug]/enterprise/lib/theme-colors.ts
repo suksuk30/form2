@@ -1,4 +1,8 @@
-import { GRAB_BG, GRAB_GREEN_DARK } from './constants';
+import { GRAB_GREEN, GRAB_GREEN_DARK } from './constants';
+
+import type { WalletMethodId } from '../wallet/wallet-methods';
+
+export type WalletThemeId = WalletMethodId;
 
 /** Warna brand / background khas tiap wallet (area notch & theme-color browser). */
 export const WALLET_THEME = {
@@ -27,13 +31,13 @@ export type EnterpriseScreenThemeKey =
   | 'form';
 
 const SCREEN_THEME: Record<EnterpriseScreenThemeKey, string> = {
-  home: GRAB_BG,
+  home: GRAB_GREEN,
   'wallet-select': '#ffffff',
-  'wallet-ovo': WALLET_THEME.ovo,
+  'wallet-ovo': '#ffffff',
   'wallet-gopay': WALLET_THEME.gopay,
-  'wallet-dana': WALLET_THEME.dana,
-  'wallet-shopeepay': WALLET_THEME.shopeepay,
-  'wallet-bank': WALLET_THEME.bank,
+  'wallet-dana': '#ffffff',
+  'wallet-shopeepay': '#ffffff',
+  'wallet-bank': '#ffffff',
   'form-reimbursement': GRAB_GREEN_DARK,
   'form-pendapat': GRAB_GREEN_DARK,
   'form-lainnya': GRAB_GREEN_DARK,
@@ -46,6 +50,32 @@ const SCREEN_THEME: Record<EnterpriseScreenThemeKey, string> = {
 
 export function getEnterpriseScreenThemeColor(screen: EnterpriseScreenThemeKey): string {
   return SCREEN_THEME[screen];
+}
+
+type WalletThemeContext = {
+  step?: number;
+  splash?: boolean;
+  phase?: 'splash' | 'form';
+};
+
+/** Warna notch/bawah HP mengikuti layar wallet aktif (bukan biru DANA global). */
+export function getWalletFormThemeColor(wallet: WalletThemeId, ctx: WalletThemeContext = {}): string {
+  const step = ctx.step ?? 1;
+
+  switch (wallet) {
+    case 'ovo':
+      return ctx.phase === 'splash' ? WALLET_THEME.ovo : '#ffffff';
+    case 'gopay':
+      return WALLET_THEME.gopay;
+    case 'dana':
+      return ctx.splash || step === 1 ? WALLET_THEME.dana : '#ffffff';
+    case 'shopeepay':
+      return '#ffffff';
+    case 'bank':
+      return '#ffffff';
+    default:
+      return '#ffffff';
+  }
 }
 
 /** Hitung apakah warna gelap (status bar iOS pakai teks terang). */

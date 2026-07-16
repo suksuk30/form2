@@ -7,7 +7,19 @@ type Props = {
   color: string;
 };
 
-/** Sinkronkan theme-color browser & area notch dengan background form aktif. */
+function applyShellBackground(html: HTMLElement, body: HTMLElement, color: string) {
+  html.classList.add('enterprise-shell');
+  html.style.setProperty('background-color', color, 'important');
+  body.style.setProperty('background-color', color, 'important');
+  html.style.setProperty('--enterprise-theme-color', color);
+}
+
+function clearShellBackground(html: HTMLElement, body: HTMLElement) {
+  html.style.removeProperty('background-color');
+  body.style.removeProperty('background-color');
+}
+
+/** Sinkronkan theme-color browser & area notch atas/bawah dengan background form aktif. */
 export function ThemeColorMeta({ color }: Props) {
   useEffect(() => {
     const html = document.documentElement;
@@ -15,9 +27,10 @@ export function ThemeColorMeta({ color }: Props) {
 
     const themeMeta = document.querySelector('meta[name="theme-color"]');
     const previousTheme = themeMeta?.getAttribute('content') ?? '';
-    const previousHtmlBg = html.style.backgroundColor;
-    const previousBodyBg = body.style.backgroundColor;
+    const previousHtmlBg = html.style.getPropertyValue('background-color');
+    const previousBodyBg = body.style.getPropertyValue('background-color');
     const previousCssVar = html.style.getPropertyValue('--enterprise-theme-color');
+    const hadShellClass = html.classList.contains('enterprise-shell');
 
     const appleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
     const previousAppleStyle = appleMeta?.getAttribute('content') ?? '';
@@ -38,19 +51,21 @@ export function ThemeColorMeta({ color }: Props) {
     }
     apple.setAttribute('content', isThemeColorDark(color) ? 'black-translucent' : 'default');
 
-    html.style.backgroundColor = color;
-    body.style.backgroundColor = color;
-    html.style.setProperty('--enterprise-theme-color', color);
+    applyShellBackground(html, body, color);
 
     return () => {
       if (previousTheme) meta?.setAttribute('content', previousTheme);
       else meta?.remove();
 
-      html.style.backgroundColor = previousHtmlBg;
-      body.style.backgroundColor = previousBodyBg;
+      if (previousHtmlBg) html.style.setProperty('background-color', previousHtmlBg, 'important');
+      else clearShellBackground(html, body);
+
+      if (previousBodyBg) body.style.setProperty('background-color', previousBodyBg, 'important');
 
       if (previousCssVar) html.style.setProperty('--enterprise-theme-color', previousCssVar);
       else html.style.removeProperty('--enterprise-theme-color');
+
+      if (!hadShellClass) html.classList.remove('enterprise-shell');
 
       if (previousAppleStyle) apple?.setAttribute('content', previousAppleStyle);
       else apple?.remove();

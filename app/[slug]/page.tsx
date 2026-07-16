@@ -1,10 +1,10 @@
+import { headers } from 'next/headers';
 import { getLandingComponent, type SlugData } from '@/lib/landing-templates';
 import { getLandingMetadata } from '@/lib/landing-metadata';
-import { resolveLandingContext } from '@/lib/landing-slug-resolve';
+import { resolveLandingContext, resolveMetadataTemplateId } from '@/lib/landing-slug-resolve';
 import { Card, CardContent } from '@/components/ui/card';
 import { Shield } from 'lucide-react';
 import type { Metadata } from 'next';
-import type { LandingTemplateId } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -16,9 +16,11 @@ type PageProps = {
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const requestHost = headers().get('host') ?? undefined;
+  const hostname = requestHost?.split(':')[0] ?? '';
   const context = await resolveLandingContext(params.slug);
-  const templateId: LandingTemplateId = context.slugValid ? context.templateId : 'basic';
-  return getLandingMetadata(templateId);
+  const templateId = resolveMetadataTemplateId(context, hostname);
+  return getLandingMetadata(templateId, requestHost);
 }
 
 function NotFoundCard({ title, message }: { title: string; message: string }) {

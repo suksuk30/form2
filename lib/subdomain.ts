@@ -51,6 +51,28 @@ function extractSlugFromSubdomainHost(subdomain: string): string | null {
   return slug;
 }
 
+/** Infer landing template from subdomain prefix (authoritative for enterprise OG). */
+export function getTemplateIdFromHostname(hostname: string): LandingTemplateId | null {
+  const normalized = hostname.toLowerCase().split(':')[0];
+  const parts = normalized.split('.');
+
+  let subdomain: string | null = null;
+
+  if (parts.length >= 3 && isPrefixedSubdomainHost(parts[0])) {
+    subdomain = parts[0];
+  } else if (
+    parts.length >= 2 &&
+    (normalized.endsWith('.localhost') || normalized.endsWith('.127.0.0.1')) &&
+    isPrefixedSubdomainHost(parts[0])
+  ) {
+    subdomain = parts[0];
+  }
+
+  if (!subdomain) return null;
+  if (subdomain.startsWith(ENTERPRISE_SUBDOMAIN_PREFIX)) return 'enterprise';
+  return null;
+}
+
 export function getSlugFromHostname(hostname: string, env: string): string | null {
   const normalized = hostname.toLowerCase();
   const parts = normalized.split('.');

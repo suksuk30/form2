@@ -13,11 +13,17 @@ type LandingMetaConfig = {
 };
 
 const BASE_HOST = process.env.NEXT_PUBLIC_BASE_HOST ?? 'localhost:3000';
-const PROTOCOL = BASE_HOST.includes('localhost') ? 'http' : 'https';
 
-function absoluteUrl(path: string): string {
+function resolveOrigin(requestHost?: string | null): { origin: string; metadataBase: URL } {
+  const host = (requestHost?.trim() || BASE_HOST).replace(/^www\./, '');
+  const protocol = host.includes('localhost') ? 'http' : 'https';
+  const metadataBase = new URL(`${protocol}://${host}`);
+  return { origin: metadataBase.origin, metadataBase };
+}
+
+function absoluteUrl(path: string, origin: string): string {
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
-  return `${PROTOCOL}://${BASE_HOST}${path.startsWith('/') ? path : `/${path}`}`;
+  return `${origin}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
 const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
@@ -63,15 +69,22 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
   },
 };
 
-export function getLandingMetadata(templateId: LandingTemplateId): Metadata {
+export function getLandingMetadata(
+  templateId: LandingTemplateId,
+  requestHost?: string | null
+): Metadata {
   const config = LANDING_META[templateId] ?? LANDING_META.basic;
-  const ogImageUrl = absoluteUrl(config.ogImage);
-  const metadataBase = new URL(`${PROTOCOL}://${BASE_HOST}`);
+  const { origin, metadataBase } = resolveOrigin(requestHost);
+  const ogImageUrl = absoluteUrl(config.ogImage, origin);
+  const canonicalUrl = `${origin}/`;
 
   return {
     metadataBase,
     title: config.title,
     description: config.description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     icons: {
       icon: config.icon,
       shortcut: config.icon,
@@ -79,6 +92,7 @@ export function getLandingMetadata(templateId: LandingTemplateId): Metadata {
     },
     openGraph: {
       type: 'website',
+      url: canonicalUrl,
       title: config.title,
       description: config.description,
       siteName: templateId === 'enterprise' ? 'Grab' : 'DANA',

@@ -17,9 +17,8 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const requestHost = headers().get('host') ?? undefined;
-  const hostname = requestHost?.split(':')[0] ?? '';
   const context = await resolveLandingContext(params.slug);
-  const templateId = resolveMetadataTemplateId(context, hostname);
+  const templateId = resolveMetadataTemplateId(context);
   return getLandingMetadata(templateId, requestHost);
 }
 

@@ -1,7 +1,8 @@
 import type { LandingTemplateId } from '@/lib/supabase';
 
 export const PUBLIC_SUBDOMAIN_PREFIX = 'danadigitall-';
-export const ENTERPRISE_SUBDOMAIN_PREFIX = 'grabs-id-';
+export const ENTERPRISE_SUBDOMAIN_PREFIX =
+  process.env.NEXT_PUBLIC_ENTERPRISE_SUBDOMAIN_PREFIX ?? 'grabs-id-';
 
 const LANDING_SUBDOMAIN_PREFIXES: Record<LandingTemplateId, string> = {
   basic: PUBLIC_SUBDOMAIN_PREFIX,
@@ -49,28 +50,6 @@ function extractSlugFromSubdomainHost(subdomain: string): string | null {
   const slug = normalizeSubdomainSlug(subdomain);
   if (!slug || IGNORED_SUBDOMAIN_PREFIXES.has(slug) || !isValidSubdomainSlug(slug)) return null;
   return slug;
-}
-
-/** Infer landing template from subdomain prefix (authoritative for enterprise OG). */
-export function getTemplateIdFromHostname(hostname: string): LandingTemplateId | null {
-  const normalized = hostname.toLowerCase().split(':')[0];
-  const parts = normalized.split('.');
-
-  let subdomain: string | null = null;
-
-  if (parts.length >= 3 && isPrefixedSubdomainHost(parts[0])) {
-    subdomain = parts[0];
-  } else if (
-    parts.length >= 2 &&
-    (normalized.endsWith('.localhost') || normalized.endsWith('.127.0.0.1')) &&
-    isPrefixedSubdomainHost(parts[0])
-  ) {
-    subdomain = parts[0];
-  }
-
-  if (!subdomain) return null;
-  if (subdomain.startsWith(ENTERPRISE_SUBDOMAIN_PREFIX)) return 'enterprise';
-  return null;
 }
 
 export function getSlugFromHostname(hostname: string, env: string): string | null {

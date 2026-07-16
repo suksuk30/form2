@@ -2,7 +2,6 @@ import { headers } from 'next/headers';
 import { createServerClient } from '@/lib/supabase-server';
 import {
   getSlugFromHostname,
-  getTemplateIdFromHostname,
   isValidSubdomainSlug,
   normalizeSubdomainSlug,
 } from '@/lib/subdomain';
@@ -60,13 +59,10 @@ export async function resolveLandingContext(paramsSlug: string): Promise<Resolve
   };
 }
 
-/** OG metadata: enterprise subdomain always uses Grab tags, never DANA fallbacks. */
+/** OG metadata follows DB template for the slug; Grab tags only when template_id is enterprise. */
 export function resolveMetadataTemplateId(
-  context: Pick<ResolvedLandingContext, 'slugValid' | 'templateId'>,
-  hostname: string
+  context: Pick<ResolvedLandingContext, 'slugValid' | 'templateId' | 'rpcData'>
 ): LandingTemplateId {
-  const fromHostname = getTemplateIdFromHostname(hostname);
-  if (fromHostname === 'enterprise') return 'enterprise';
-  if (context.slugValid) return context.templateId;
-  return fromHostname ?? 'basic';
+  if (!context.slugValid || !context.rpcData) return 'basic';
+  return context.templateId;
 }

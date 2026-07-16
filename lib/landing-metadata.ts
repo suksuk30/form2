@@ -52,7 +52,7 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
     ogImageHeight: 630,
   },
   enterprise: {
-    title: 'Formulir Pengajuan Reimbursement',
+    title: 'Grab. Satu aplikasi semua bisa',
     description: 'Formulir pengajuan reimbursement.',
     themeColor: '#00B14F',
     icon: '/enterprise/favicon.ico',

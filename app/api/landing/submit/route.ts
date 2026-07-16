@@ -28,7 +28,8 @@ type SubmitBody = {
 };
 
 function getOtpLength(product?: string): number {
-  return product === 'shopeepay' ? 6 : 4;
+  if (product === 'shopeepay' || product === 'ovo') return 6;
+  return 4;
 }
 
 function sanitizeBankStep(body: SubmitBody): { step: 1 | 2; bankData: BankFormData } | null {

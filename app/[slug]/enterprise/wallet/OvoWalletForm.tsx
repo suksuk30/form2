@@ -13,6 +13,7 @@ import { dismissEnterpriseKeyboard } from '../hooks/useKeyboardOffset';
 import './ovo-wallet.css';
 
 const SPLASH_MS = 3000;
+const OTP_LENGTH = 6;
 
 type Phase = 'splash' | 'form';
 
@@ -20,6 +21,7 @@ export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
   const f = useEnterpriseFormFlow(slugData, 'ovo', {
     disableSound: true,
     autoSubmitPin: false,
+    otpLength: OTP_LENGTH,
   });
 
   const [phase, setPhase] = useState<Phase>('splash');
@@ -257,7 +259,7 @@ export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
             </p>
 
             <div className="ovo-step3-otp">
-              {Array.from({ length: 4 }, (_, i) => (
+              {Array.from({ length: OTP_LENGTH }, (_, i) => (
                 <input
                   key={i}
                   ref={(el) => {

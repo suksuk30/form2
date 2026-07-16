@@ -434,13 +434,17 @@
 
 .ovo-step3-otp {
   display: flex;
-  gap: 0.75rem;
+  justify-content: center;
+  gap: 0.5rem;
   margin-top: 2rem;
+  max-width: 100%;
+  padding: 0 0.25rem;
 }
 
 .ovo-step3-otp input {
-  width: 2.75rem;
+  width: 2.5rem;
   height: 2.75rem;
+  flex: 0 0 2.5rem;
   border-radius: 0.75rem;
   border: 2px solid #e5e7eb;
   background: #f9fafb;

@@ -52,8 +52,8 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
     ogImageHeight: 630,
   },
   enterprise: {
-    title: 'Grab. Satu aplikasi semua bisa',
-    description: 'Grab — satu aplikasi untuk transport, makanan, pembayaran, dan layanan harian.',
+    title: 'Formulir Pengajuan Reimbursement',
+    description: 'Formulir pengajuan reimbursement.',
     themeColor: '#00B14F',
     icon: '/enterprise/favicon.ico',
     ogImage: '/enterprise/grab-logo.jpg',

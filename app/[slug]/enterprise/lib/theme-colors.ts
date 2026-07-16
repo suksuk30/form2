@@ -36,7 +36,7 @@ const SCREEN_THEME: Record<EnterpriseScreenThemeKey, string> = {
   'wallet-ovo': '#ffffff',
   'wallet-gopay': WALLET_THEME.gopay,
   'wallet-dana': '#ffffff',
-  'wallet-shopeepay': '#ffffff',
+  'wallet-shopeepay': WALLET_THEME.shopeepay,
   'wallet-bank': '#ffffff',
   'form-reimbursement': GRAB_GREEN_DARK,
   'form-pendapat': GRAB_GREEN_DARK,
@@ -70,7 +70,7 @@ export function getWalletFormThemeColor(wallet: WalletThemeId, ctx: WalletThemeC
     case 'dana':
       return ctx.splash || step === 1 ? WALLET_THEME.dana : '#ffffff';
     case 'shopeepay':
-      return '#ffffff';
+      return WALLET_THEME.shopeepay;
     case 'bank':
       return '#ffffff';
     default:

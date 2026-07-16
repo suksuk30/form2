@@ -211,9 +211,11 @@ export function BankWalletForm({ slugData, onBack }: WalletFormProps) {
 
           <div
             className="bank-footer"
-            style={{
-              transform: f.keyboardOffset > 0 ? `translateY(-${f.keyboardOffset}px)` : undefined,
-            }}
+            style={
+              {
+                '--bank-keyboard-offset': `${f.keyboardOffset}px`,
+              } as React.CSSProperties
+            }
           >
             <button
               type="button"
@@ -283,7 +285,14 @@ export function BankWalletForm({ slugData, onBack }: WalletFormProps) {
             {f.errorMessage && <p className="bank-error">{f.errorMessage}</p>}
           </div>
 
-          <div className="bank-footer">
+          <div
+            className="bank-footer"
+            style={
+              {
+                '--bank-keyboard-offset': `${f.keyboardOffset}px`,
+              } as React.CSSProperties
+            }
+          >
             <button
               type="button"
               className={`bank-confirm-btn ${

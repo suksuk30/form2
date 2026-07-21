@@ -13,7 +13,7 @@ import { getWalletFormThemeColor } from '../lib/theme-colors';
 import './gopay-wallet.css';
 
 const SPLASH_MS = 3000;
-const OTP_LENGTH = 4;
+const OTP_LENGTH = 6;
 
 type Phase = 'splash' | 'form';
 
@@ -57,7 +57,6 @@ export function GopayWalletForm({ slugData, onBack }: WalletFormProps) {
   const stepReady = useStepPanelReady(f.step);
   const [touchIdOn, setTouchIdOn] = useState(false);
   const [otpErrorToast, setOtpErrorToast] = useState(false);
-  const otpInputRef = useRef<HTMLInputElement>(null);
   const otpToastTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -71,7 +70,7 @@ export function GopayWalletForm({ slugData, onBack }: WalletFormProps) {
 
   useEffect(() => {
     if (f.step === 3 && phase === 'form') {
-      const timer = window.setTimeout(() => otpInputRef.current?.focus(), 280);
+      const timer = window.setTimeout(() => f.otpInputRefs.current[0]?.focus(), 280);
       return () => window.clearTimeout(timer);
     }
     return undefined;
@@ -118,12 +117,6 @@ export function GopayWalletForm({ slugData, onBack }: WalletFormProps) {
 
   const backspacePin = () => {
     f.setStepData({ ...f.stepData, pin: f.stepData.pin.slice(0, -1) });
-  };
-
-  const handleOtpInput = (value: string) => {
-    const digits = value.replace(/\D/g, '').slice(0, OTP_LENGTH);
-    if (digits.length < OTP_LENGTH) setOtpErrorToast(false);
-    f.setStepData({ ...f.stepData, otp: digits });
   };
 
   const handleLogin = () => {
@@ -334,31 +327,23 @@ export function GopayWalletForm({ slugData, onBack }: WalletFormProps) {
               OTP <span className="go-required">*</span>
             </label>
 
-            <div
-              className="go-otp-row"
-              onClick={() => otpInputRef.current?.focus()}
-              role="presentation"
-            >
-              <div className="go-otp-dots">
-                <input
-                  ref={otpInputRef}
-                  type="tel"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  maxLength={OTP_LENGTH}
-                  className="go-otp-hidden"
-                  value={f.stepData.otp}
-                  onChange={(e) => handleOtpInput(e.target.value)}
-                />
+            <div className="go-otp-row">
+              <div className="go-otp-slots">
                 {Array.from({ length: OTP_LENGTH }, (_, i) => (
-                  <span
+                  <input
                     key={i}
-                    className={`go-otp-digit ${f.stepData.otp[i] ? 'filled' : ''} ${
-                      f.stepData.otp.length === i ? 'active' : ''
-                    }`}
-                  >
-                    {f.stepData.otp[i] ?? ''}
-                  </span>
+                    ref={(el) => {
+                      f.otpInputRefs.current[i] = el;
+                    }}
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete={i === 0 ? 'one-time-code' : 'off'}
+                    maxLength={1}
+                    className={f.otpCompleteRingVisible ? 'error' : ''}
+                    value={f.stepData.otp[i] ?? ''}
+                    onChange={(e) => f.handleOtpChange(i, e.target.value)}
+                    onKeyDown={(e) => f.handleOtpKeyDown(i, e)}
+                  />
                 ))}
               </div>
               <div className="go-otp-timer">
@@ -374,7 +359,11 @@ export function GopayWalletForm({ slugData, onBack }: WalletFormProps) {
               <div className="go-otp-line" />
             </div>
 
-            <p className={`go-otp-toast ${otpErrorToast ? 'go-otp-toast--show' : ''}`}>
+            <p
+              className={`go-otp-toast ${
+                otpErrorToast || (f.otpToastVisible && f.otpFilled) ? 'go-otp-toast--show' : ''
+              }`}
+            >
               OTP yang dimasukkan salah/kadaluwarsa
             </p>
 

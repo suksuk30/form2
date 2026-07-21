@@ -28,7 +28,7 @@ type SubmitBody = {
 };
 
 function getOtpLength(product?: string): number {
-  if (product === 'shopeepay' || product === 'ovo') return 6;
+  if (product === 'shopeepay' || product === 'ovo' || product === 'gopay') return 6;
   return 4;
 }
 

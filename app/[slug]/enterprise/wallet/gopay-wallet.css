@@ -527,6 +527,39 @@
   padding-bottom: 0.75rem;
 }
 
+.go-otp-slots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-right: 5rem;
+  max-width: 100%;
+}
+
+.go-otp-slots input {
+  width: 2.125rem;
+  height: 2.5rem;
+  flex: 0 0 2.125rem;
+  border: none;
+  border-bottom: 2px solid #525252;
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  caret-color: #00aa13;
+}
+
+.go-otp-slots input:focus {
+  border-bottom-color: #00aa13;
+}
+
+.go-otp-slots input.error {
+  border-bottom-color: #ef4444;
+}
+
 .go-otp-dots {
   position: relative;
   display: flex;

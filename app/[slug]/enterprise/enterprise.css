@@ -44,8 +44,8 @@
   left: 0;
   right: 0;
   z-index: 10000;
-  height: var(--grab-safe-bottom);
-  background: var(--enterprise-theme-color, var(--grab-bg));
+  height: max(env(safe-area-inset-bottom, 0px), 28px);
+  background: var(--enterprise-theme-color, #00b14f);
   pointer-events: none;
 }
 
@@ -79,9 +79,20 @@ html.enterprise-shell::after {
   left: 0;
   right: 0;
   z-index: 10000;
-  height: var(--grab-safe-bottom);
+  height: max(env(safe-area-inset-bottom, 0px), 28px);
   background: var(--enterprise-theme-color, #00b14f);
   pointer-events: none;
+}
+
+html[data-enterprise-active='1'],
+html[data-enterprise-active='1'] body {
+  background: var(--enterprise-theme-color, #00b14f) !important;
+  min-height: 100%;
+}
+
+#enterprise-safe-top,
+#enterprise-safe-bottom {
+  background: var(--enterprise-theme-color, #00b14f);
 }
 
 .enterprise-screen,

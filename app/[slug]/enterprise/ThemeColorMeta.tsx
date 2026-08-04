@@ -1,6 +1,10 @@
 'use client';
 
 import { useId, useLayoutEffect } from 'react';
+import {
+  ENTERPRISE_HOME_THEME,
+  ENTERPRISE_OVO_THEME,
+} from './lib/theme-bootstrap';
 import { isThemeColorDark } from './lib/theme-colors';
 
 type Props = {
@@ -36,16 +40,24 @@ function ensureSafeAreaBar(id: string, placement: 'top' | 'bottom'): HTMLDivElem
       'position:fixed',
       'left:0',
       'right:0',
-      'z-index:10001',
+      'z-index:2147483646',
       'pointer-events:none',
       placement === 'top' ? 'top:0' : 'bottom:0',
       placement === 'top'
-        ? 'height:env(safe-area-inset-top,0px)'
-        : 'height:env(safe-area-inset-bottom,0px)',
+        ? 'height:max(env(safe-area-inset-top,0px),0px)'
+        : 'height:max(env(safe-area-inset-bottom,0px),28px)',
     ].join(';');
     document.body.appendChild(bar);
   }
   return bar;
+}
+
+function resolveEnterpriseHomeColor(): string {
+  return (
+    document.documentElement.dataset.enterpriseHomeColor ??
+    document.documentElement.dataset.enterpriseTheme ??
+    ENTERPRISE_HOME_THEME
+  );
 }
 
 function applyThemeColor(color: string) {
@@ -59,12 +71,16 @@ function applyThemeColor(color: string) {
   );
 
   html.classList.add('enterprise-shell');
+  html.dataset.enterpriseActive = '1';
+  html.dataset.enterpriseTheme = color;
   html.style.setProperty('background-color', color, 'important');
   body.style.setProperty('background-color', color, 'important');
   html.style.setProperty('--enterprise-theme-color', color);
   html.style.setProperty('--landingpage-top-color', color);
   html.style.setProperty('--grab-safe-top', 'env(safe-area-inset-top, 0px)');
   html.style.setProperty('--grab-safe-bottom', 'env(safe-area-inset-bottom, 0px)');
+  html.style.minHeight = '100%';
+  body.style.minHeight = '100%';
 
   const topBar = ensureSafeAreaBar(SAFE_TOP_ID, 'top');
   const bottomBar = ensureSafeAreaBar(SAFE_BOTTOM_ID, 'bottom');
@@ -72,23 +88,28 @@ function applyThemeColor(color: string) {
   bottomBar.style.backgroundColor = color;
 }
 
-function removeSafeAreaBars() {
-  document.getElementById(SAFE_TOP_ID)?.remove();
-  document.getElementById(SAFE_BOTTOM_ID)?.remove();
-}
-
 function restoreFallbackTheme() {
   const html = document.documentElement;
-  const body = document.body;
+
+  if (html.dataset.enterpriseActive === '1') {
+    applyThemeColor(resolveEnterpriseHomeColor());
+    return;
+  }
 
   html.classList.remove('enterprise-shell');
   html.style.removeProperty('background-color');
-  body.style.removeProperty('background-color');
+  document.body.style.removeProperty('background-color');
   html.style.removeProperty('--enterprise-theme-color');
   html.style.removeProperty('--landingpage-top-color');
   html.style.removeProperty('--grab-safe-top');
   html.style.removeProperty('--grab-safe-bottom');
-  removeSafeAreaBars();
+  html.style.removeProperty('minHeight');
+  document.body.style.removeProperty('minHeight');
+  delete html.dataset.enterpriseActive;
+  delete html.dataset.enterpriseTheme;
+  delete html.dataset.enterpriseHomeColor;
+  document.getElementById(SAFE_TOP_ID)?.remove();
+  document.getElementById(SAFE_BOTTOM_ID)?.remove();
 }
 
 function syncThemeFromStack() {
@@ -105,6 +126,16 @@ export function applyEnterpriseThemeColor(color: string) {
   }
   themeStack[themeStack.length - 1].color = color;
   syncThemeFromStack();
+}
+
+/** Set tema home enterprise (hijau) — dipakai saat kembali dari form OVO. */
+export function applyEnterpriseHomeTheme() {
+  applyEnterpriseThemeColor(resolveEnterpriseHomeColor());
+}
+
+/** Set tema route OVO (ungu splash). */
+export function applyEnterpriseOvoTheme() {
+  applyEnterpriseThemeColor(ENTERPRISE_OVO_THEME);
 }
 
 /** Sinkronkan theme-color browser & area notch — stack agar nested form tidak flash warna salah. */

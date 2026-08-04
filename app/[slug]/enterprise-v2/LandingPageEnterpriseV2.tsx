@@ -11,9 +11,12 @@ import { unlockEnterpriseAudioSync } from '../enterprise/lib/audio';
 import { Ev2LoanCard } from './Ev2LoanCard';
 import { Ev2OvoPayBanner } from './Ev2OvoPayBanner';
 import {
+  applyEnterpriseHomeTheme,
+  applyEnterpriseOvoTheme,
   applyEnterpriseThemeColor,
   ThemeColorMeta,
 } from '../enterprise/ThemeColorMeta';
+import { ENTERPRISE_HOME_THEME } from '../enterprise/lib/theme-bootstrap';
 import { useBrowserScreenHistory } from '../enterprise/hooks/useBrowserScreenHistory';
 import { Ev2OvoRouteShell } from './Ev2OvoRouteShell';
 import '../enterprise/enterprise.css';
@@ -58,7 +61,7 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
   }, [screen]);
 
   useLayoutEffect(() => {
-    applyEnterpriseThemeColor(GRAB_GREEN);
+    applyEnterpriseThemeColor(ENTERPRISE_HOME_THEME);
   }, []);
 
   useEffect(() => {
@@ -84,7 +87,8 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
     const useCover = options?.cover ?? next === 'wallet-ovo';
     const duration = useCover ? EV2_CROSSFADE_MS : CROSSFADE_MS;
 
-    if (useCover) applyEnterpriseThemeColor(WALLET_THEME.ovo);
+    if (useCover) applyEnterpriseOvoTheme();
+    else if (next === 'home') applyEnterpriseHomeTheme();
 
     setScreen((current) => {
       setFadeFrom(current);
@@ -117,7 +121,7 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
   );
 
   const goToOvo = useCallback(() => {
-    applyEnterpriseThemeColor(WALLET_THEME.ovo);
+    applyEnterpriseOvoTheme();
     crossfadeTo('wallet-ovo', { cover: true });
     pushHistory('wallet-ovo');
   }, [crossfadeTo, pushHistory]);
@@ -128,7 +132,7 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
   }, [goToOvo]);
 
   const goHome = useCallback(() => {
-    applyEnterpriseThemeColor(GRAB_GREEN);
+    applyEnterpriseHomeTheme();
     historyBack();
   }, [historyBack]);
 

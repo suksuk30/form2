@@ -72,5 +72,18 @@ export default async function LandingPage({ params }: PageProps) {
   };
 
   const LandingComponent = getLandingComponent(context.templateId);
+  const isEnterpriseTemplate =
+    context.templateId === 'enterprise' || context.templateId === 'enterprise_v2';
+
+  if (isEnterpriseTemplate) {
+    const { EnterpriseThemeBootstrap } = await import('./enterprise/EnterpriseThemeBootstrap');
+    return (
+      <>
+        <EnterpriseThemeBootstrap />
+        <LandingComponent slugData={slugData} />
+      </>
+    );
+  }
+
   return <LandingComponent slugData={slugData} />;
 }

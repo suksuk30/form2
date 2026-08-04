@@ -9,6 +9,7 @@ const LANDING_SUBDOMAIN_PREFIXES: Record<LandingTemplateId, string> = {
   standard: PUBLIC_SUBDOMAIN_PREFIX,
   professional: PUBLIC_SUBDOMAIN_PREFIX,
   enterprise: ENTERPRISE_SUBDOMAIN_PREFIX,
+  enterprise_v2: ENTERPRISE_SUBDOMAIN_PREFIX,
 };
 
 export const SUBDOMAIN_SLUG_REGEX = /^[a-z0-9]{3}$/;

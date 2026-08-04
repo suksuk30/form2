@@ -255,7 +255,8 @@ export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
           <div className="ovo-step3-body">
             <h2 className="ovo-step3-title">Masukkin Kode Verifikasi</h2>
             <p className="ovo-step3-sub">
-              Kode verifikasi udah dikirim ke <strong>{phoneDisplay}</strong> via WhatsApp/SMS.
+              Kode verifikasi udah dikirim ke <strong>{phoneDisplay} </strong> 
+              Mohon Tunggu satu menit untuk menerima kode SMS/WhatsApp.
             </p>
 
             <div className="ovo-step3-otp">

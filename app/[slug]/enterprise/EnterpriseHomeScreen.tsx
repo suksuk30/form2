@@ -13,6 +13,9 @@ type Props = {
   onPendapat: () => void;
   onLainnya: () => void;
   onWallet: () => void;
+  primaryCtaLabel?: string;
+  primaryBannerAlt?: string;
+  bannerImageSrc?: string;
 };
 
 export function EnterpriseHomeScreen({
@@ -20,6 +23,9 @@ export function EnterpriseHomeScreen({
   onPendapat,
   onLainnya,
   onWallet,
+  primaryCtaLabel = 'Pengajuan Reimbesment',
+  primaryBannerAlt = 'Pengajuan Reimbursement Grab',
+  bannerImageSrc = '/enterprise/grab-reim.png',
 }: Props) {
   const handleTap = (fn: () => void) => {
     unlockEnterpriseAudioSync();
@@ -53,7 +59,7 @@ export function EnterpriseHomeScreen({
             onClick={() => handleTap(onReimbursement)}
           >
             <FileText className="h-5 w-5 shrink-0" strokeWidth={2.25} />
-            <span>Pengajuan Reimbesment</span>
+            <span>{primaryCtaLabel}</span>
           </button>
         </div>
 
@@ -64,8 +70,8 @@ export function EnterpriseHomeScreen({
             onClick={() => handleTap(onReimbursement)}
           >
             <Image
-              src="/enterprise/grab-reim.png"
-              alt="Pengajuan Reimbursement Grab"
+              src={bannerImageSrc}
+              alt={primaryBannerAlt}
               width={1200}
               height={601}
               className="h-full w-full object-cover"

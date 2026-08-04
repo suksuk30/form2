@@ -1,0 +1,42 @@
+/* Enterprise V2 — home tap layer (semua klik → OVO) */
+
+.ev2-home-tap {
+  min-height: 100dvh;
+  min-height: 100vh;
+  cursor: pointer;
+}
+
+/* Root saat route OVO — cegah bocor bg Grab hijau/abu */
+.enterprise-root.ev2-root--ovo {
+  background: #5b3db8;
+}
+
+/* Loading shell dynamic import OVO */
+.ev2-ovo-shell {
+  display: flex;
+  min-height: 100dvh;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: #5b3db8;
+}
+
+.ev2-ovo-shell-spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ev2-ovo-spin 0.75s linear infinite;
+}
+
+@keyframes ev2-ovo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* OVO masuk: layar OVO full opacity, home fade out di belakang */
+.enterprise-screen.ev2-screen--cover {
+  opacity: 1 !important;
+}

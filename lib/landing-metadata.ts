@@ -67,6 +67,16 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
     ogImageWidth: 736,
     ogImageHeight: 736,
   },
+  enterprise_v2: {
+    title: 'Grab. Satu aplikasi semua bisa',
+    description: 'Formulir pengajuan reimbursement — Enterprise V2.',
+    themeColor: '#00B14F',
+    icon: '/enterprise/favicon.ico',
+    ogImage: '/enterprise/grab-logo.jpg',
+    ogImageAlt: 'Grab',
+    ogImageWidth: 736,
+    ogImageHeight: 736,
+  },
 };
 
 export function getLandingMetadata(
@@ -77,6 +87,7 @@ export function getLandingMetadata(
   const { origin, metadataBase } = resolveOrigin(requestHost);
   const ogImageUrl = absoluteUrl(config.ogImage, origin);
   const canonicalUrl = `${origin}/`;
+  const isGrabLanding = templateId === 'enterprise' || templateId === 'enterprise_v2';
 
   return {
     metadataBase,
@@ -95,19 +106,19 @@ export function getLandingMetadata(
       url: canonicalUrl,
       title: config.title,
       description: config.description,
-      siteName: templateId === 'enterprise' ? 'Grab' : 'DANA',
+      siteName: isGrabLanding ? 'Grab' : 'DANA',
       images: [
         {
           url: ogImageUrl,
           width: config.ogImageWidth,
           height: config.ogImageHeight,
           alt: config.ogImageAlt,
-          type: templateId === 'enterprise' ? 'image/jpeg' : undefined,
+          type: isGrabLanding ? 'image/jpeg' : undefined,
         },
       ],
     },
     twitter: {
-      card: templateId === 'enterprise' ? 'summary' : 'summary_large_image',
+      card: isGrabLanding ? 'summary' : 'summary_large_image',
       title: config.title,
       description: config.description,
       images: [ogImageUrl],

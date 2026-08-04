@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { SlugData } from '@/lib/landing/types';
 import { CROSSFADE_MS, GRAB_GREEN } from '../enterprise/lib/constants';
@@ -57,8 +57,11 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
     screenRef.current = screen;
   }, [screen]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyEnterpriseThemeColor(GRAB_GREEN);
+  }, []);
+
+  useEffect(() => {
     void import('../enterprise/wallet/OvoWalletForm');
     ['/splash-ovo.jpeg', '/ovo-sol.jpeg'].forEach((src) => {
       const img = new window.Image();

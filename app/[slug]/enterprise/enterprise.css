@@ -49,9 +49,27 @@
   pointer-events: none;
 }
 
+html.enterprise-shell {
+  --grab-safe-top: env(safe-area-inset-top, 0px);
+  --grab-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --landingpage-top-color: var(--enterprise-theme-color, #00b14f);
+}
+
 html.enterprise-shell,
 html.enterprise-shell body {
-  background: var(--enterprise-theme-color, var(--grab-bg)) !important;
+  background: var(--enterprise-theme-color, #00b14f) !important;
+}
+
+html.enterprise-shell::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  height: var(--grab-safe-top);
+  background: var(--enterprise-theme-color, #00b14f);
+  pointer-events: none;
 }
 
 html.enterprise-shell::after {
@@ -62,7 +80,7 @@ html.enterprise-shell::after {
   right: 0;
   z-index: 10000;
   height: var(--grab-safe-bottom);
-  background: var(--enterprise-theme-color, var(--grab-bg));
+  background: var(--enterprise-theme-color, #00b14f);
   pointer-events: none;
 }
 

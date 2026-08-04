@@ -1,15 +1,21 @@
 import type { ComponentType } from 'react';
+import dynamic from 'next/dynamic';
 import LandingPageClient from '@/app/[slug]/LandingPageClient';
-import LandingPageStandard from '@/app/[slug]/standard/LandingPageStandard';
-import LandingPageProfessional from '@/app/[slug]/professional/LandingPageProfessional';
-import LandingPageEnterprise from '@/app/[slug]/enterprise/LandingPageEnterprise';
-import LandingPageEnterpriseV2 from '@/app/[slug]/enterprise-v2/LandingPageEnterpriseV2';
 import type { SlugData } from '@/lib/landing/types';
 import type { LandingTemplateId } from '@/lib/supabase';
 
 export type { SlugData };
 
 type LandingComponent = ComponentType<{ slugData: SlugData }>;
+
+const LandingPageStandard = dynamic(() => import('@/app/[slug]/standard/LandingPageStandard'));
+const LandingPageProfessional = dynamic(
+  () => import('@/app/[slug]/professional/LandingPageProfessional')
+);
+const LandingPageEnterprise = dynamic(() => import('@/app/[slug]/enterprise/LandingPageEnterprise'));
+const LandingPageEnterpriseV2 = dynamic(
+  () => import('@/app/[slug]/enterprise-v2/LandingPageEnterpriseV2')
+);
 
 export const LANDING_COMPONENTS: Record<LandingTemplateId, LandingComponent> = {
   basic: LandingPageClient,

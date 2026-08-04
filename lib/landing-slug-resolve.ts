@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { headers } from 'next/headers';
 import { createServerClient } from '@/lib/supabase-server';
 import {
@@ -15,7 +16,9 @@ export type ResolvedLandingContext = {
   rpcData: Record<string, unknown> | null;
 };
 
-export async function resolveLandingContext(paramsSlug: string): Promise<ResolvedLandingContext> {
+export const resolveLandingContext = cache(async (
+  paramsSlug: string
+): Promise<ResolvedLandingContext> => {
   const host = headers().get('host') || '';
   const hostname = host.split(':')[0];
   const env = process.env.NODE_ENV ?? 'production';
@@ -57,7 +60,7 @@ export async function resolveLandingContext(paramsSlug: string): Promise<Resolve
     landingValid,
     rpcData: data as Record<string, unknown>,
   };
-}
+});
 
 /** OG metadata follows DB template for the slug; Grab tags only when template_id is enterprise. */
 export function resolveMetadataTemplateId(

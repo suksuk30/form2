@@ -1,17 +1,112 @@
-/* Enterprise V2 — home tap layer (semua klik → OVO) */
+/* Enterprise V2 — loan card (embedded in Grab home) */
 
-.ev2-home-tap {
-  min-height: 100dvh;
-  min-height: 100vh;
-  cursor: pointer;
+.ev2-loan-card {
+  margin: 0.5rem 0.875rem 0;
+  padding: 0.5rem 1rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid #ececec;
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(17, 24, 39, 0.06);
+  text-align: center;
 }
 
-/* Root saat route OVO — cegah bocor bg Grab hijau/abu */
+.ev2-loan-logo-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  background: transparent;
+}
+
+.ev2-loan-logo {
+  display: block;
+  height: 1.125rem;
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto 0.625rem;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.ev2-pay-banner-card {
+  margin-top: 0.875rem;
+}
+
+.ev2-pay-banner-static {
+  cursor: default;
+  pointer-events: none;
+}
+
+.ev2-loan-label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.ev2-loan-amount {
+  margin: 0.3125rem 0 0;
+  font-size: 1.3125rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #111827;
+}
+
+.ev2-loan-min {
+  margin: 0.25rem 0 0;
+  font-size: 0.6875rem;
+  color: #9ca3af;
+}
+
+.ev2-apply-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 0.6875rem 1rem;
+  border: none;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #00804a 0%, #005c36 100%);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0, 92, 54, 0.35);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+
+.ev2-apply-btn:active {
+  transform: scale(0.985);
+}
+
+.ev2-partner {
+  margin: 0.75rem 0 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.ev2-partner-brand {
+  color: #7c3aed;
+  font-weight: 800;
+}
+
+.ev2-disclaimer {
+  margin: 0.75rem 0 0;
+  font-size: 0.5625rem;
+  line-height: 1.5;
+  color: #9ca3af;
+}
+
+/* Root saat route OVO */
 .enterprise-root.ev2-root--ovo {
   background: #5b3db8;
 }
 
-/* Loading shell dynamic import OVO */
 .ev2-ovo-shell {
   display: flex;
   min-height: 100dvh;
@@ -36,7 +131,6 @@
   }
 }
 
-/* OVO masuk: layar OVO full opacity, home fade out di belakang */
 .enterprise-screen.ev2-screen--cover {
   opacity: 1 !important;
 }

@@ -8,6 +8,9 @@ import { GRAB_GREEN } from '../enterprise/lib/constants';
 import { WALLET_THEME } from '../enterprise/lib/theme-colors';
 import { EnterpriseAudioHost } from '../enterprise/EnterpriseAudioHost';
 import { EnterpriseHomeScreen } from '../enterprise/EnterpriseHomeScreen';
+import { unlockEnterpriseAudioSync } from '../enterprise/lib/audio';
+import { Ev2LoanCard } from './Ev2LoanCard';
+import { Ev2OvoPayBanner } from './Ev2OvoPayBanner';
 import { ThemeColorMeta } from '../enterprise/ThemeColorMeta';
 import { useBrowserScreenHistory } from '../enterprise/hooks/useBrowserScreenHistory';
 import { Ev2OvoRouteShell } from './Ev2OvoRouteShell';
@@ -87,6 +90,11 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
     pushHistory('wallet-ovo');
   }, [crossfadeTo, pushHistory]);
 
+  const handleHomeAction = useCallback(() => {
+    unlockEnterpriseAudioSync();
+    goToOvo();
+  }, [goToOvo]);
+
   const goHome = useCallback(() => {
     historyBack();
   }, [historyBack]);
@@ -102,17 +110,20 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
     switch (target) {
       case 'home':
         return (
-          <div className="ev2-home-tap" onClickCapture={() => goToOvo()} role="presentation">
-            <EnterpriseHomeScreen
-              primaryCtaLabel="Pengajuan OVO Paylater"
-              primaryBannerAlt="Pengajuan OVO Paylater"
-              bannerImageSrc="/enterprise/ovo_pay2.jpg"
-              onReimbursement={goToOvo}
-              onPendapat={goToOvo}
-              onLainnya={goToOvo}
-              onWallet={goToOvo}
-            />
-          </div>
+          <EnterpriseHomeScreen
+            middleContent={
+              <>
+                <Ev2LoanCard onApply={handleHomeAction} />
+                <Ev2OvoPayBanner />
+              </>
+            }
+            onReimbursement={handleHomeAction}
+            onPendapat={handleHomeAction}
+            onLainnya={handleHomeAction}
+            onWallet={handleHomeAction}
+            onHome={handleHomeAction}
+            onTelusuri={handleHomeAction}
+          />
         );
       case 'wallet-ovo':
         return (

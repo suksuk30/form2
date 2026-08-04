@@ -6,6 +6,7 @@ import { ENTERPRISE_BOTTOM_NAV } from './lib/home-data';
 type Props = {
   activeId?: string;
   onHome?: () => void;
+  onTelusuri?: () => void;
   onPendapat?: () => void;
   onWallet?: () => void;
   onLainnya?: () => void;
@@ -22,6 +23,7 @@ const ICONS = {
 export function EnterpriseHomeBottomNav({
   activeId = 'utama',
   onHome,
+  onTelusuri,
   onPendapat,
   onWallet,
   onLainnya,
@@ -32,6 +34,7 @@ export function EnterpriseHomeBottomNav({
         const Icon = ICONS[item.icon];
         const isActive = item.id === activeId;
         const isHome = item.id === 'utama';
+        const isTelusuri = item.id === 'telusuri';
         const isPendapat = item.id === 'pendapat';
         const isWallet = item.id === 'dompet';
         const isLainnya = item.id === 'lainnya';
@@ -39,13 +42,15 @@ export function EnterpriseHomeBottomNav({
         const handleClick =
           isHome && onHome
             ? onHome
-            : isPendapat && onPendapat
-              ? onPendapat
-              : isWallet && onWallet
-                ? onWallet
-                : isLainnya && onLainnya
-                  ? onLainnya
-                  : undefined;
+            : isTelusuri && onTelusuri
+              ? onTelusuri
+              : isPendapat && onPendapat
+                ? onPendapat
+                : isWallet && onWallet
+                  ? onWallet
+                  : isLainnya && onLainnya
+                    ? onLainnya
+                    : undefined;
 
         return (
           <button

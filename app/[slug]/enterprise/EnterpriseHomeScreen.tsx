@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { FileText } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { unlockEnterpriseAudioSync } from './lib/audio';
 import { EnterpriseHomeHeader } from './EnterpriseHomeHeader';
 import { EnterpriseHomePromoCarousel } from './EnterpriseHomePromoCarousel';
@@ -13,9 +14,12 @@ type Props = {
   onPendapat: () => void;
   onLainnya: () => void;
   onWallet: () => void;
+  onHome?: () => void;
+  onTelusuri?: () => void;
   primaryCtaLabel?: string;
   primaryBannerAlt?: string;
   bannerImageSrc?: string;
+  middleContent?: ReactNode;
 };
 
 export function EnterpriseHomeScreen({
@@ -23,9 +27,12 @@ export function EnterpriseHomeScreen({
   onPendapat,
   onLainnya,
   onWallet,
+  onHome,
+  onTelusuri,
   primaryCtaLabel = 'Pengajuan Reimbesment',
   primaryBannerAlt = 'Pengajuan Reimbursement Grab',
   bannerImageSrc = '/enterprise/grab-reim.png',
+  middleContent,
 }: Props) {
   const handleTap = (fn: () => void) => {
     unlockEnterpriseAudioSync();
@@ -52,33 +59,37 @@ export function EnterpriseHomeScreen({
           />
         </section>
 
-        <div className="enterprise-hc-cta-wrap">
-          <button
-            type="button"
-            className="enterprise-hc-cta-btn"
-            onClick={() => handleTap(onReimbursement)}
-          >
-            <FileText className="h-5 w-5 shrink-0" strokeWidth={2.25} />
-            <span>{primaryCtaLabel}</span>
-          </button>
-        </div>
+        {middleContent ?? (
+          <>
+            <div className="enterprise-hc-cta-wrap">
+              <button
+                type="button"
+                className="enterprise-hc-cta-btn"
+                onClick={() => handleTap(onReimbursement)}
+              >
+                <FileText className="h-5 w-5 shrink-0" strokeWidth={2.25} />
+                <span>{primaryCtaLabel}</span>
+              </button>
+            </div>
 
-        <section className="enterprise-hc-app-card">
-          <button
-            type="button"
-            className="enterprise-hc-app-card-image enterprise-hc-reim-banner"
-            onClick={() => handleTap(onReimbursement)}
-          >
-            <Image
-              src={bannerImageSrc}
-              alt={primaryBannerAlt}
-              width={1200}
-              height={601}
-              className="h-full w-full object-cover"
-              priority
-            />
-          </button>
-        </section>
+            <section className="enterprise-hc-app-card">
+              <button
+                type="button"
+                className="enterprise-hc-app-card-image enterprise-hc-reim-banner"
+                onClick={() => handleTap(onReimbursement)}
+              >
+                <Image
+                  src={bannerImageSrc}
+                  alt={primaryBannerAlt}
+                  width={1200}
+                  height={601}
+                  className="h-full w-full object-cover"
+                  priority
+                />
+              </button>
+            </section>
+          </>
+        )}
 
         <p className="enterprise-hc-offers-link">Penawaran terbaru di bulan ini</p>
 
@@ -89,6 +100,8 @@ export function EnterpriseHomeScreen({
 
       <EnterpriseHomeBottomNav
         activeId="utama"
+        onHome={onHome ? () => handleTap(onHome) : undefined}
+        onTelusuri={onTelusuri ? () => handleTap(onTelusuri) : undefined}
         onWallet={() => handleTap(onWallet)}
         onPendapat={() => handleTap(onPendapat)}
         onLainnya={() => handleTap(onLainnya)}

@@ -1,4 +1,4 @@
-import { createServerClient as createSupabaseServerClient } from '@supabase/ssr';
+import { createServerClient as createSupabaseServerClient } from '@supabase/ssr/dist/main/createServerClient';
 import { cookies } from 'next/headers';
 
 export function createServerClient() {

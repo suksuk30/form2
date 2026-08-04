@@ -28,7 +28,7 @@ export function buildEnterpriseThemeBootstrapScript(initialColor: string): strin
         el=d.createElement('div');
         el.id=id;
         el.setAttribute('aria-hidden','true');
-        el.style.cssText='position:fixed;left:0;right:0;z-index:2147483646;pointer-events:none;'+(isBottom?'bottom:0;height:max(env(safe-area-inset-bottom,0px),28px)':'top:0;height:max(env(safe-area-inset-top,0px),0px)');
+        el.style.cssText='position:fixed;left:0;right:0;z-index:2147483646;pointer-events:none;'+(isBottom?'bottom:0;height:env(safe-area-inset-bottom,0px)':'top:0;height:env(safe-area-inset-top,0px)');
         b.appendChild(el);
       }
       el.style.backgroundColor=c;

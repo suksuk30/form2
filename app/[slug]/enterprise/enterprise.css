@@ -44,7 +44,7 @@
   left: 0;
   right: 0;
   z-index: 10000;
-  height: max(env(safe-area-inset-bottom, 0px), 28px);
+  height: var(--grab-safe-bottom);
   background: var(--enterprise-theme-color, #00b14f);
   pointer-events: none;
 }
@@ -79,7 +79,7 @@ html.enterprise-shell::after {
   left: 0;
   right: 0;
   z-index: 10000;
-  height: max(env(safe-area-inset-bottom, 0px), 28px);
+  height: var(--grab-safe-bottom);
   background: var(--enterprise-theme-color, #00b14f);
   pointer-events: none;
 }

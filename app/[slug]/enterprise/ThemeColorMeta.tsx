@@ -44,8 +44,8 @@ function ensureSafeAreaBar(id: string, placement: 'top' | 'bottom'): HTMLDivElem
       'pointer-events:none',
       placement === 'top' ? 'top:0' : 'bottom:0',
       placement === 'top'
-        ? 'height:max(env(safe-area-inset-top,0px),0px)'
-        : 'height:max(env(safe-area-inset-bottom,0px),28px)',
+        ? 'height:env(safe-area-inset-top,0px)'
+        : 'height:env(safe-area-inset-bottom,0px)',
     ].join(';');
     document.body.appendChild(bar);
   }

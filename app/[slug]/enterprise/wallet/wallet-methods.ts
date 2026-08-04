@@ -19,4 +19,6 @@ export const WALLET_METHODS: WalletMethod[] = [
 export type WalletFormProps = {
   slugData: EnterpriseSlugData;
   onBack: () => void;
+  /** EV2: parent owns route shell; form still manages step theme via stack */
+  embedded?: boolean;
 };

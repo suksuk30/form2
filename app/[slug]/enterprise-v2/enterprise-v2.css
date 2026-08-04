@@ -105,6 +105,8 @@
 /* Root saat route OVO */
 .enterprise-root.ev2-root--ovo {
   background: #5b3db8;
+  --enterprise-theme-color: #5b3db8;
+  transition: background-color 280ms ease;
 }
 
 .ev2-ovo-shell {
@@ -132,5 +134,5 @@
 }
 
 .enterprise-screen.ev2-screen--cover {
-  opacity: 1 !important;
+  will-change: opacity;
 }

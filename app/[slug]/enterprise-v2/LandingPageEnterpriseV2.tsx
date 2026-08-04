@@ -3,19 +3,23 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { SlugData } from '@/lib/landing/types';
-import { CROSSFADE_MS } from '../enterprise/lib/constants';
-import { GRAB_GREEN } from '../enterprise/lib/constants';
+import { CROSSFADE_MS, GRAB_GREEN } from '../enterprise/lib/constants';
 import { WALLET_THEME } from '../enterprise/lib/theme-colors';
 import { EnterpriseAudioHost } from '../enterprise/EnterpriseAudioHost';
 import { EnterpriseHomeScreen } from '../enterprise/EnterpriseHomeScreen';
 import { unlockEnterpriseAudioSync } from '../enterprise/lib/audio';
 import { Ev2LoanCard } from './Ev2LoanCard';
 import { Ev2OvoPayBanner } from './Ev2OvoPayBanner';
-import { ThemeColorMeta } from '../enterprise/ThemeColorMeta';
+import {
+  applyEnterpriseThemeColor,
+  ThemeColorMeta,
+} from '../enterprise/ThemeColorMeta';
 import { useBrowserScreenHistory } from '../enterprise/hooks/useBrowserScreenHistory';
 import { Ev2OvoRouteShell } from './Ev2OvoRouteShell';
 import '../enterprise/enterprise.css';
 import './enterprise-v2.css';
+
+const EV2_CROSSFADE_MS = 680;
 
 const OvoWalletForm = dynamic(
   () => import('../enterprise/wallet/OvoWalletForm').then((m) => m.OvoWalletForm),
@@ -45,6 +49,8 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
   const [fadeFrom, setFadeFrom] = useState<Screen | null>(null);
   const [underlayOpacity, setUnderlayOpacity] = useState(1);
   const [coverEnter, setCoverEnter] = useState(false);
+  const [coverReveal, setCoverReveal] = useState(1);
+  const [ovoReady, setOvoReady] = useState(false);
   const screenRef = useRef<Screen>('home');
 
   useEffect(() => {
@@ -52,13 +58,30 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
   }, [screen]);
 
   useEffect(() => {
+    applyEnterpriseThemeColor(GRAB_GREEN);
     void import('../enterprise/wallet/OvoWalletForm');
+    ['/splash-ovo.jpeg', '/ovo-sol.jpeg'].forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
   }, []);
+
+  useEffect(() => {
+    if (screen !== 'wallet-ovo') {
+      setOvoReady(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setOvoReady(true), 48);
+    return () => window.clearTimeout(timer);
+  }, [screen]);
 
   const crossfadeTo = useCallback((next: Screen, options?: { cover?: boolean }) => {
     if (screenRef.current === next) return;
 
     const useCover = options?.cover ?? next === 'wallet-ovo';
+    const duration = useCover ? EV2_CROSSFADE_MS : CROSSFADE_MS;
+
+    if (useCover) applyEnterpriseThemeColor(WALLET_THEME.ovo);
 
     setScreen((current) => {
       setFadeFrom(current);
@@ -66,17 +89,22 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
     });
     setCoverEnter(useCover);
     setUnderlayOpacity(1);
+    setCoverReveal(useCover ? 0 : 1);
     setCrossfading(true);
 
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => setUnderlayOpacity(0));
+      requestAnimationFrame(() => {
+        setUnderlayOpacity(0);
+        if (useCover) setCoverReveal(1);
+      });
     });
 
     window.setTimeout(() => {
       setCrossfading(false);
       setFadeFrom(null);
       setCoverEnter(false);
-    }, CROSSFADE_MS);
+      setCoverReveal(1);
+    }, duration);
   }, []);
 
   const { pushHistory, historyBack } = useBrowserScreenHistory(
@@ -86,6 +114,7 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
   );
 
   const goToOvo = useCallback(() => {
+    applyEnterpriseThemeColor(WALLET_THEME.ovo);
     crossfadeTo('wallet-ovo', { cover: true });
     pushHistory('wallet-ovo');
   }, [crossfadeTo, pushHistory]);
@@ -96,6 +125,7 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
   }, [goToOvo]);
 
   const goHome = useCallback(() => {
+    applyEnterpriseThemeColor(GRAB_GREEN);
     historyBack();
   }, [historyBack]);
 
@@ -126,19 +156,19 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
           />
         );
       case 'wallet-ovo':
-        return (
-          <OvoWalletForm
-            slugData={slugData}
-            onBack={goHome}
-          />
+        return ovoReady ? (
+          <OvoWalletForm slugData={slugData} onBack={goHome} />
+        ) : (
+          <Ev2OvoRouteShell />
         );
       default:
         return null;
     }
   };
 
+  const transitionMs = coverEnter ? EV2_CROSSFADE_MS : CROSSFADE_MS;
   const showUnderlay = crossfading && fadeFrom !== null;
-  const foregroundOpacity = crossfading && !coverEnter ? 1 - underlayOpacity : 1;
+  const foregroundOpacity = coverEnter ? coverReveal : crossfading ? 1 - underlayOpacity : 1;
 
   return (
     <div className={`enterprise-root ${isOvoRoute ? 'ev2-root--ovo' : ''}`}>
@@ -148,7 +178,11 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
       {showUnderlay && fadeFrom && (
         <div
           className="enterprise-crossfade-underlay"
-          style={{ opacity: underlayOpacity, transitionDuration: `${CROSSFADE_MS}ms` }}
+          style={{
+            opacity: underlayOpacity,
+            transitionDuration: `${transitionMs}ms`,
+            transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2,  1)',
+          }}
         >
           {renderScreen(fadeFrom)}
         </div>
@@ -160,7 +194,8 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
         }`}
         style={{
           opacity: foregroundOpacity,
-          transitionDuration: `${CROSSFADE_MS}ms`,
+          transitionDuration: `${transitionMs}ms`,
+          transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
         {renderScreen(screen)}

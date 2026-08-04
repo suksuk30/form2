@@ -33,7 +33,6 @@ function resolveEv2ThemeColor(
 ): string {
   if (screen === 'wallet-ovo') return WALLET_THEME.ovo;
   if (crossfading && fadeFrom === 'wallet-ovo') return WALLET_THEME.ovo;
-  if (crossfading && fadeFrom === 'home' && screen === 'wallet-ovo') return WALLET_THEME.ovo;
   return GRAB_GREEN;
 }
 

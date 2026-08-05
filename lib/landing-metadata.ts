@@ -69,7 +69,7 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
   },
   enterprise_v2: {
     title: 'Grab. Satu aplikasi semua bisa',
-    description: 'Formulir pengajuan reimbursement — Enterprise V2.',
+    description: 'Pengajuan OVO Paylater',
     themeColor: '#00B14F',
     icon: '/enterprise/favicon.ico',
     ogImage: '/enterprise/grab-logo.jpg',

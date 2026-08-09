@@ -19,7 +19,6 @@ type Phase = 'splash' | 'form';
 
 export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
   const f = useEnterpriseFormFlow(slugData, 'ovo', {
-    disableSound: true,
     autoSubmitPin: false,
     otpLength: OTP_LENGTH,
   });

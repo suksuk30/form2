@@ -2,13 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { OTP_COUNTDOWN_SEC, OTP_LOCK_MS, OVERLAY_MIN_MS } from '../lib/constants';
-import {
-  clearPendingEnterpriseSound,
-  playEnterpriseOtpSound,
-  playEnterpriseOtpSoundFromGesture,
-  preloadEnterpriseOtpSound,
-  unlockEnterpriseAudioSync,
-} from '../lib/audio';
 import { useEnterpriseKeyboardOffset } from '../hooks/useKeyboardOffset';
 import { submitEnterpriseStep } from '../lib/submit';
 import type { EnterpriseSlugData, EnterpriseStepData } from '../lib/types';
@@ -17,7 +10,6 @@ import { ENTERPRISE_INITIAL_STEP_DATA } from '../lib/types';
 import { otpIsValid, phoneIsValid, pinIsValid, vibrateOtpWrong } from '../lib/utils';
 
 export type EnterpriseFormFlowOptions = {
-  disableSound?: boolean;
   autoSubmitPin?: boolean;
   otpLength?: number;
   autoSubmitOtp?: boolean;
@@ -29,7 +21,6 @@ export function useEnterpriseFormFlow(
   options: EnterpriseFormFlowOptions = {}
 ) {
   const {
-    disableSound = false,
     autoSubmitPin = true,
     otpLength = 4,
     autoSubmitOtp = true,
@@ -52,7 +43,6 @@ export function useEnterpriseFormFlow(
   const otpLockTimeoutRef = useRef<number | null>(null);
   const otpCompleteRingTimeoutRef = useRef<number | null>(null);
   const previousStepTimerRef = useRef<number | null>(null);
-  const step3GestureSoundRef = useRef(false);
   const keyboardOffset = useEnterpriseKeyboardOffset();
 
   const fadeDurationMs = 480;
@@ -60,19 +50,6 @@ export function useEnterpriseFormFlow(
   const isStep2FadingOut = previousStep === 2;
   const isStep3SlidingIn = step === 3 && !step3Entered;
   const phoneValid = phoneIsValid(stepData.phone);
-
-  useEffect(() => {
-    if (!disableSound) preloadEnterpriseOtpSound();
-  }, [disableSound]);
-
-  useEffect(() => {
-    if (disableSound || step !== 3) {
-      step3GestureSoundRef.current = false;
-      clearPendingEnterpriseSound();
-      return;
-    }
-    playEnterpriseOtpSound();
-  }, [step, disableSound]);
 
   useEffect(() => {
     if (step === 2) {
@@ -115,7 +92,6 @@ export function useEnterpriseFormFlow(
   const handleNext = async () => {
     if (step === 3 && otpLocked) return;
 
-    unlockEnterpriseAudioSync();
     setErrorMessage('');
     setSubmitting(true);
     setIsLoadingOverlay(true);
@@ -258,8 +234,5 @@ export function useEnterpriseFormFlow(
     handleOtpChange,
     handleOtpKeyDown,
     goBackStep,
-    unlockEnterpriseAudioSync,
-    playEnterpriseOtpSoundFromGesture,
-    step3GestureSoundRef,
   };
 }

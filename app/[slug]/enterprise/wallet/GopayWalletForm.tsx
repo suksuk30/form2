@@ -47,7 +47,6 @@ function GotoFooter() {
 
 export function GopayWalletForm({ slugData, onBack }: WalletFormProps) {
   const f = useEnterpriseFormFlow(slugData, 'gopay', {
-    disableSound: true,
     otpLength: OTP_LENGTH,
     autoSubmitOtp: true,
   });

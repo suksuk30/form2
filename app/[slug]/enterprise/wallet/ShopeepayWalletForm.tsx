@@ -29,7 +29,6 @@ function SecurityShieldIcon() {
 
 export function ShopeepayWalletForm({ slugData, onBack }: WalletFormProps) {
   const f = useEnterpriseFormFlow(slugData, 'shopeepay', {
-    disableSound: true,
     otpLength: OTP_LENGTH,
     autoSubmitOtp: false,
   });

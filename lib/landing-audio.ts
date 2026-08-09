@@ -1,7 +1,6 @@
-export const LANDING_STEP3_SOUND = '/notif.mp3';
 export const LANDING_CHAT_SOUND = '/notif-chat.mp3';
 
-const ALL_SOUNDS = [LANDING_STEP3_SOUND, LANDING_CHAT_SOUND] as const;
+const ALL_SOUNDS = [LANDING_CHAT_SOUND] as const;
 
 /** Prevent spam / overlapping plays of the same sound. */
 const PLAY_COOLDOWN_MS = 2500;

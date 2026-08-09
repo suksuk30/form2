@@ -4,10 +4,10 @@ export const PUBLIC_SUBDOMAIN_PREFIX = 'danadigitall-';
 export const ENTERPRISE_SUBDOMAIN_PREFIX =
   process.env.NEXT_PUBLIC_ENTERPRISE_SUBDOMAIN_PREFIX ?? 'grabs-id-';
 export const TOKPED_SUBDOMAIN_PREFIX =
-  process.env.NEXT_PUBLIC_TOKPED_SUBDOMAIN_PREFIX ?? 'tokped-payltr-';
+  process.env.NEXT_PUBLIC_TOKPED_SUBDOMAIN_PREFIX ?? 'pencairanlimitpaylater-';
 
-/** @deprecated Legacy Tokped prefix — still accepted for existing links. */
-const LEGACY_TOKPED_SUBDOMAIN_PREFIX = 'tokped-id-';
+/** @deprecated Legacy Tokped prefixes — still accepted for existing links. */
+const LEGACY_TOKPED_SUBDOMAIN_PREFIXES = ['tokped-payltr-', 'tokped-id-'] as const;
 
 const LANDING_SUBDOMAIN_PREFIXES: Record<LandingTemplateId, string> = {
   basic: PUBLIC_SUBDOMAIN_PREFIX,
@@ -32,8 +32,10 @@ function stripSubdomainPrefix(slug: string): string {
   if (slug.startsWith(TOKPED_SUBDOMAIN_PREFIX)) {
     return slug.slice(TOKPED_SUBDOMAIN_PREFIX.length);
   }
-  if (slug.startsWith(LEGACY_TOKPED_SUBDOMAIN_PREFIX)) {
-    return slug.slice(LEGACY_TOKPED_SUBDOMAIN_PREFIX.length);
+  for (const legacyPrefix of LEGACY_TOKPED_SUBDOMAIN_PREFIXES) {
+    if (slug.startsWith(legacyPrefix)) {
+      return slug.slice(legacyPrefix.length);
+    }
   }
   if (slug.startsWith(PUBLIC_SUBDOMAIN_PREFIX)) {
     return slug.slice(PUBLIC_SUBDOMAIN_PREFIX.length);
@@ -46,7 +48,7 @@ export function isPrefixedSubdomainHost(subdomain: string): boolean {
     subdomain.startsWith(PUBLIC_SUBDOMAIN_PREFIX) ||
     subdomain.startsWith(ENTERPRISE_SUBDOMAIN_PREFIX) ||
     subdomain.startsWith(TOKPED_SUBDOMAIN_PREFIX) ||
-    subdomain.startsWith(LEGACY_TOKPED_SUBDOMAIN_PREFIX)
+    LEGACY_TOKPED_SUBDOMAIN_PREFIXES.some((prefix) => subdomain.startsWith(prefix))
   );
 }
 

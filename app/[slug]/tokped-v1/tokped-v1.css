@@ -1,0 +1,530 @@
+/* Tokped V1 — Tokopedia Care home */
+
+.tv1-home {
+  --tv1-green: #00aa5b;
+  --tv1-green-dark: #009951;
+  min-height: 100dvh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #111;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.tv1-home-header {
+  background: #000;
+  padding: 0.5rem 1rem;
+}
+
+.tv1-home-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+}
+
+.tv1-home-logo-tokped {
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+.tv1-home-header-divider {
+  width: 1px;
+  height: 1.5rem;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.tv1-home-logo-tiktok {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 1.3125rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.tv1-home-tiktok-note {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.tv1-home-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.5rem;
+  background: var(--tv1-green);
+  padding: 0.75rem 1rem;
+}
+
+.tv1-home-banner-logo {
+  display: block;
+  width: 3.25rem;
+  height: 3.25rem;
+  object-fit: contain;
+}
+
+.tv1-home-main {
+  flex: 1;
+  padding: 1.75rem 1.25rem 1.5rem;
+  text-align: center;
+}
+
+.tv1-home-title {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--tv1-green);
+  letter-spacing: -0.02em;
+}
+
+.tv1-home-lead {
+  margin: 1.125rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: #111;
+}
+
+.tv1-home-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.125rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.625rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.tv1-home-btn:active {
+  transform: scale(0.985);
+}
+
+.tv1-home-btn--primary {
+  margin-top: 1.75rem;
+  border: none;
+  background: var(--tv1-green);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 170, 91, 0.25);
+}
+
+.tv1-home-btn--outline {
+  border: 1.5px solid var(--tv1-green);
+  background: #fff;
+  color: #111;
+}
+
+.tv1-home-menu {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-top: 0.25rem;
+}
+
+.tv1-home-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.tv1-home-menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: #111;
+}
+
+.tv1-home-menu-icon svg {
+  width: 1.625rem;
+  height: 1.625rem;
+}
+
+.tv1-home-menu-label {
+  font-size: 0.6875rem;
+  line-height: 1.25;
+  color: #111;
+  max-width: 4.5rem;
+}
+
+.tv1-home-footer {
+  padding: 1.25rem 1rem 1.75rem;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #111;
+}
+
+.tv1-home-footer p {
+  margin: 0 0 0.375rem;
+}
+
+.tv1-home-footer strong {
+  color: var(--tv1-green);
+  font-weight: 700;
+}
+
+.tv1-home-footer-legal {
+  margin-top: 0.75rem !important;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: #333;
+}
+
+.tv1-root--home {
+  background: #fff;
+}
+
+/* Login & OTP form screens */
+
+.tv1-form-screen {
+  --tv1-green: #00aa5b;
+  min-height: 100dvh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #111;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.tv1-form-header {
+  background: var(--tv1-green);
+  padding: 0.875rem 1rem;
+  text-align: center;
+}
+
+.tv1-form-header-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.875rem;
+}
+
+.tv1-form-logo-tokped {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+.tv1-form-header-divider {
+  width: 1px;
+  height: 1.25rem;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.tv1-form-logo-tiktok {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.tv1-form-tiktok-note {
+  width: 1rem;
+  height: 1rem;
+}
+
+.tv1-form-header-title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.tv1-form-body {
+  flex: 1;
+  padding: 1.5rem 1.25rem 1rem;
+}
+
+.tv1-form-body--otp {
+  padding-top: 1.75rem;
+}
+
+.tv1-form-label {
+  display: block;
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.tv1-form-label--spaced {
+  margin-top: 1.25rem;
+}
+
+.tv1-form-required {
+  color: #111;
+}
+
+.tv1-form-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.875rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.625rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #111;
+  background: #fff;
+  outline: none;
+}
+
+.tv1-form-input:focus {
+  border-color: var(--tv1-green);
+}
+
+.tv1-phone-wrap {
+  position: relative;
+}
+
+.tv1-phone-prefix {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #111;
+  pointer-events: none;
+  user-select: none;
+}
+
+.tv1-form-input--phone {
+  width: 100%;
+}
+
+.tv1-form-input--pin {
+  letter-spacing: 0.15em;
+}
+
+.tv1-form-input--otp {
+  margin-top: 1rem;
+}
+
+.tv1-form-error {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: #dc2626;
+}
+
+.tv1-form-submit {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+  padding: 0.9375rem 1rem;
+  border: none;
+  border-radius: 0.625rem;
+  background: var(--tv1-green);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.tv1-form-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.tv1-form-submit:not(:disabled):active {
+  transform: scale(0.985);
+}
+
+.tv1-form-menu {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-top: 2.25rem;
+  padding-top: 0.25rem;
+}
+
+.tv1-form-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+
+.tv1-form-menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: #111;
+}
+
+.tv1-form-menu-icon svg {
+  width: 1.625rem;
+  height: 1.625rem;
+}
+
+.tv1-form-menu-label {
+  font-size: 0.6875rem;
+  line-height: 1.25;
+  color: #111;
+  text-align: center;
+  max-width: 4.5rem;
+}
+
+.tv1-form-footer {
+  padding: 1.25rem 1rem 1.75rem;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #111;
+}
+
+.tv1-form-footer p {
+  margin: 0 0 0.375rem;
+}
+
+.tv1-form-footer strong {
+  color: var(--tv1-green);
+  font-weight: 700;
+}
+
+.tv1-form-footer-legal {
+  margin-top: 0.75rem !important;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: #333;
+}
+
+.tv1-otp-title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.tv1-otp-subtitle {
+  margin: 0.625rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: #111;
+}
+
+.tv1-otp-timer {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.tv1-otp-timer strong {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Loading overlay — lingkaran hijau Tokopedia, tanpa logo */
+.tv1-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.tv1-loading-backdrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(2px);
+}
+
+.tv1-loading-spinner {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 170, 91, 0.2);
+  border-top-color: #00aa5b;
+  animation: tv1-loading-spin 0.75s linear infinite;
+}
+
+@keyframes tv1-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form route loading shell */
+.enterprise-root.tv1-root--form {
+  background: #fff;
+  --enterprise-theme-color: #00aa5b;
+  transition: background-color 280ms ease;
+}
+
+.tv1-route-shell--form {
+  background: #fff;
+}
+
+.tv1-route-shell--form .tv1-route-shell-spinner {
+  border: 3px solid rgba(0, 170, 91, 0.2);
+  border-top-color: #00aa5b;
+}
+
+.tv1-route-shell {
+  display: flex;
+  min-height: 100dvh;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.tv1-route-shell-spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #00aa5b;
+  border-radius: 50%;
+  animation: tv1-route-spin 0.75s linear infinite;
+}
+
+@keyframes tv1-route-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.enterprise-screen.tv1-screen--cover {
+  will-change: opacity;
+}
+

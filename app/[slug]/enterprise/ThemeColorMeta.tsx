@@ -3,6 +3,7 @@
 import { useId, useLayoutEffect } from 'react';
 import {
   ENTERPRISE_HOME_THEME,
+  ENTERPRISE_TOKPED_THEME,
   ENTERPRISE_OVO_THEME,
 } from './lib/theme-bootstrap';
 import { isThemeColorDark } from './lib/theme-colors';
@@ -136,6 +137,11 @@ export function applyEnterpriseHomeTheme() {
 /** Set tema route OVO (ungu splash). */
 export function applyEnterpriseOvoTheme() {
   applyEnterpriseThemeColor(ENTERPRISE_OVO_THEME);
+}
+
+/** Set tema route Tokped (hijau Tokopedia). */
+export function applyEnterpriseTokpedTheme() {
+  applyEnterpriseThemeColor(ENTERPRISE_TOKPED_THEME);
 }
 
 /** Sinkronkan theme-color browser & area notch — stack agar nested form tidak flash warna salah. */

@@ -1,6 +1,7 @@
 /** Warna awal enterprise — dipakai SSR bootstrap & client shell (bukan biru DANA). */
 export const ENTERPRISE_HOME_THEME = '#00B14F';
 export const ENTERPRISE_OVO_THEME = '#5b3db8';
+export const ENTERPRISE_TOKPED_THEME = '#00aa5b';
 
 /** Script inline — jalan sebelum React hydrate agar notch/nav bawah tidak flash biru. */
 export function buildEnterpriseThemeBootstrapScript(initialColor: string): string {

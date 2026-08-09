@@ -8,7 +8,13 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export type UserRole = 'user' | 'super_admin';
 export type UserStatus = 'inactive' | 'active' | 'expired';
 
-export type LandingTemplateId = 'basic' | 'standard' | 'professional' | 'enterprise' | 'enterprise_v2';
+export type LandingTemplateId =
+  | 'basic'
+  | 'standard'
+  | 'professional'
+  | 'enterprise'
+  | 'enterprise_v2'
+  | 'tokped_v1';
 
 export interface LandingTemplate {
   id: LandingTemplateId;

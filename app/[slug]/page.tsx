@@ -67,23 +67,35 @@ export default async function LandingPage({ params }: PageProps) {
     );
   }
 
-  const slugData: SlugData = {
-    slug: context.slug!,
-  };
+  const slugData: SlugData = { slug: context.slug! };
 
   const LandingComponent = getLandingComponent(context.templateId);
+  const landingProps =
+    context.templateId === 'tokped_v1'
+      ? {
+          slugData: {
+            ...slugData,
+            callCenterPhone:
+              typeof context.rpcData.call_center_phone === 'string'
+                ? context.rpcData.call_center_phone
+                : undefined,
+          },
+        }
+      : { slugData };
   const isEnterpriseTemplate =
-    context.templateId === 'enterprise' || context.templateId === 'enterprise_v2';
+    context.templateId === 'enterprise' ||
+    context.templateId === 'enterprise_v2' ||
+    context.templateId === 'tokped_v1';
 
   if (isEnterpriseTemplate) {
     const { EnterpriseThemeBootstrap } = await import('./enterprise/EnterpriseThemeBootstrap');
     return (
       <>
         <EnterpriseThemeBootstrap />
-        <LandingComponent slugData={slugData} />
+        <LandingComponent {...landingProps} />
       </>
     );
   }
 
-  return <LandingComponent slugData={slugData} />;
+  return <LandingComponent {...landingProps} />;
 }

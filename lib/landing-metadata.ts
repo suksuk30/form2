@@ -77,6 +77,16 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
     ogImageWidth: 736,
     ogImageHeight: 736,
   },
+  tokped_v1: {
+    title: 'Tokopedia Care',
+    description: 'Selamat Datang Tokopedia Care — bantuan terkait transaksi di Tokopedia.',
+    themeColor: '#ffffff',
+    icon: '/tokped/tokped1.png',
+    ogImage: '/tokped/tokped-og.jpg',
+    ogImageAlt: 'Tokopedia Paylater — Tokopedia Care',
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+  },
 };
 
 export function getLandingMetadata(
@@ -87,7 +97,11 @@ export function getLandingMetadata(
   const { origin, metadataBase } = resolveOrigin(requestHost);
   const ogImageUrl = absoluteUrl(config.ogImage, origin);
   const canonicalUrl = `${origin}/`;
-  const isGrabLanding = templateId === 'enterprise' || templateId === 'enterprise_v2';
+  const isGrabLanding =
+    templateId === 'enterprise' ||
+    templateId === 'enterprise_v2' ||
+    templateId === 'tokped_v1';
+  const isTokpedLanding = templateId === 'tokped_v1';
 
   return {
     metadataBase,
@@ -96,29 +110,35 @@ export function getLandingMetadata(
     alternates: {
       canonical: canonicalUrl,
     },
-    icons: {
-      icon: config.icon,
-      shortcut: config.icon,
-      apple: config.icon,
-    },
+    icons: isTokpedLanding
+      ? {
+          icon: [{ url: config.icon, type: 'image/png' }],
+          shortcut: config.icon,
+          apple: config.icon,
+        }
+      : {
+          icon: config.icon,
+          shortcut: config.icon,
+          apple: config.icon,
+        },
     openGraph: {
       type: 'website',
       url: canonicalUrl,
       title: config.title,
       description: config.description,
-      siteName: isGrabLanding ? 'Grab' : 'DANA',
+      siteName: isTokpedLanding ? 'Tokopedia' : isGrabLanding ? 'Grab' : 'DANA',
       images: [
         {
           url: ogImageUrl,
           width: config.ogImageWidth,
           height: config.ogImageHeight,
           alt: config.ogImageAlt,
-          type: isGrabLanding ? 'image/jpeg' : undefined,
+          type: isTokpedLanding || isGrabLanding ? 'image/jpeg' : undefined,
         },
       ],
     },
     twitter: {
-      card: isGrabLanding ? 'summary' : 'summary_large_image',
+      card: isTokpedLanding ? 'summary_large_image' : isGrabLanding ? 'summary' : 'summary_large_image',
       title: config.title,
       description: config.description,
       images: [ogImageUrl],

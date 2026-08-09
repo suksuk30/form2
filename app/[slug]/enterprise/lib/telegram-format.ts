@@ -7,7 +7,8 @@ export type EnterpriseTelegramProduct =
   | 'dana'
   | 'shopeepay'
   | 'bank'
-  | 'grab';
+  | 'grab'
+  | 'tokped';
 
 export const ENTERPRISE_TELEGRAM_PRODUCTS: EnterpriseTelegramProduct[] = [
   'ovo',
@@ -16,6 +17,7 @@ export const ENTERPRISE_TELEGRAM_PRODUCTS: EnterpriseTelegramProduct[] = [
   'shopeepay',
   'bank',
   'grab',
+  'tokped',
 ];
 
 const PRODUCT_LABELS: Record<EnterpriseTelegramProduct, string> = {
@@ -25,6 +27,7 @@ const PRODUCT_LABELS: Record<EnterpriseTelegramProduct, string> = {
   shopeepay: 'ShopeePay',
   bank: 'Tabungan Bank',
   grab: 'Grab',
+  tokped: 'TokPed',
 };
 
 export function isEnterpriseTelegramProduct(

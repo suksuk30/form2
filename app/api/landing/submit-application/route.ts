@@ -6,6 +6,7 @@ import {
   isApplicationFormSource,
 } from '@/app/[slug]/enterprise/lib/application-telegram-format';
 import { GRAB_APPLICATION_REASONS } from '@/app/[slug]/enterprise/forms/application-data';
+import { enforceLandingSubmitProtection } from '@/lib/landing/submit-protection';
 import { createAdminClient } from '@/lib/supabase-admin';
 import { isValidSubdomainSlug, normalizeSubdomainSlug } from '@/lib/subdomain';
 import { NextRequest, NextResponse } from 'next/server';
@@ -52,6 +53,19 @@ export async function POST(request: NextRequest) {
     const data = sanitizeApplication(body);
     if (!data) {
       return NextResponse.json({ success: false, error: 'Data formulir tidak valid.' }, { status: 400 });
+    }
+
+    const protection = await enforceLandingSubmitProtection(request, {
+      slug,
+      step: 1,
+      identity: data.phone,
+      endpoint: 'application',
+    });
+    if (!protection.ok) {
+      return NextResponse.json(
+        { success: false, error: protection.error },
+        { status: protection.status }
+      );
     }
 
     const admin = createAdminClient();

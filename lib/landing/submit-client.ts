@@ -11,6 +11,7 @@ export async function submitLandingStepViaApi(
   try {
     const response = await fetch('/api/landing/submit', {
       method: 'POST',
+      credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         slug,

@@ -12,6 +12,7 @@ export async function submitGrabApplication(
   try {
     const response = await fetch('/api/landing/submit-application', {
       method: 'POST',
+      credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         slug,

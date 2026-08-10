@@ -62,6 +62,6 @@ export async function checkLandingRateLimit(
 
 export const LANDING_RATE_LIMITS = {
   globalPerHour: 24,
-  slugPerHour: 8,
-  applicationPerHour: 8,
+  slugPerHour: 10,
+  applicationPerHour: 10,
 } as const;

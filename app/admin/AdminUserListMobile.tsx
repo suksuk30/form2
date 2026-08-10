@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
-import { Trash2, Layers } from 'lucide-react';
+import { Trash2, Layers, Pencil } from 'lucide-react';
 import { User, UserLandingPage } from '@/lib/supabase';
 
 export default function AdminUserListMobile({
@@ -13,6 +13,7 @@ export default function AdminUserListMobile({
   activateLoading,
   openActivateModal,
   openLandingsModal,
+  openEditModal,
   setDeactivateModal,
   setDeleteDialog,
   getStatusBadge,
@@ -23,6 +24,7 @@ export default function AdminUserListMobile({
   activateLoading: boolean;
   openActivateModal: (u: User) => void;
   openLandingsModal: (u: User) => void;
+  openEditModal: (u: User) => void;
   setDeactivateModal: (v: { open: boolean; user: User | null }) => void;
   setDeleteDialog: (v: { open: boolean; user: User | null }) => void;
   getStatusBadge: (status: string) => React.ReactNode;
@@ -82,6 +84,14 @@ export default function AdminUserListMobile({
                       : openActivateModal(u)
                   }
                 />
+                <Button
+                  size="icon"
+                  variant="outline"
+                  className="text-slate-300 border-slate-600 hover:bg-slate-700"
+                  onClick={() => openEditModal(u)}
+                >
+                  <Pencil className="w-4 h-4" />
+                </Button>
                 <Button
                   size="icon"
                   variant="outline"

@@ -27,7 +27,7 @@ import {
 } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-import { Loader2, LogOut, Trash2, Send, Layers } from 'lucide-react';
+import { Loader2, LogOut, Trash2, Send, Layers, UserPlus, Pencil } from 'lucide-react';
 import { LandingTemplate, User, UserLandingPage } from '@/lib/supabase';
 import { getLandingExpiryDate } from '@/lib/landing-utils';
 import AdminUserListMobile from './AdminUserListMobile';
@@ -44,6 +44,22 @@ function initLandingForm(user: User | null, templates: LandingTemplate[]): Landi
     };
   }
   return form;
+}
+
+type UserFormState = {
+  username: string;
+  phone: string;
+  password: string;
+};
+
+const EMPTY_USER_FORM: UserFormState = { username: '', phone: '', password: '' };
+
+function userToForm(user: User): UserFormState {
+  return {
+    username: user.username,
+    phone: user.phone,
+    password: '',
+  };
 }
 
 export default function AdminDashboard() {
@@ -72,6 +88,15 @@ export default function AdminDashboard() {
     user: null,
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [editModal, setEditModal] = useState<{ open: boolean; user: User | null }>({
+    open: false,
+    user: null,
+  });
+  const [createForm, setCreateForm] = useState<UserFormState>(EMPTY_USER_FORM);
+  const [editForm, setEditForm] = useState<UserFormState>(EMPTY_USER_FORM);
+  const [createLoading, setCreateLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
 
   const filteredUsers = users.filter((u) => {
     const term = searchTerm.trim().toLowerCase();
@@ -262,6 +287,66 @@ export default function AdminDashboard() {
     }
   };
 
+  const openEditModal = (userToEdit: User) => {
+    setEditForm(userToForm(userToEdit));
+    setEditModal({ open: true, user: userToEdit });
+  };
+
+  const handleCreateUser = async () => {
+    setCreateLoading(true);
+    try {
+      const response = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(createForm),
+      });
+      const data = await response.json();
+
+      if (!response.ok || data?.error) {
+        toast.error(data?.error || 'Gagal mendaftarkan user');
+      } else {
+        toast.success('Pelanggan berhasil didaftarkan');
+        setCreateModalOpen(false);
+        setCreateForm(EMPTY_USER_FORM);
+        await fetchUsers();
+      }
+    } catch {
+      toast.error('Terjadi kesalahan');
+    } finally {
+      setCreateLoading(false);
+    }
+  };
+
+  const handleUpdateUser = async () => {
+    if (!editModal.user) return;
+
+    setEditLoading(true);
+    try {
+      const response = await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: editModal.user.id,
+          ...editForm,
+        }),
+      });
+      const data = await response.json();
+
+      if (!response.ok || data?.error) {
+        toast.error(data?.error || 'Gagal memperbarui user');
+      } else {
+        toast.success('Data user berhasil diperbarui');
+        setEditModal({ open: false, user: null });
+        setEditForm(EMPTY_USER_FORM);
+        await fetchUsers();
+      }
+    } catch {
+      toast.error('Terjadi kesalahan');
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
   const handleDelete = async () => {
     if (!deleteDialog.user) return;
 
@@ -296,7 +381,7 @@ export default function AdminDashboard() {
     const labels: Record<string, string> = {
       active: 'Aktif',
       inactive: 'Nonaktif',
-      expired: 'Expired',
+      expired: 'Exp',
     };
     return (
       <Badge className={variants[status] || 'bg-slate-600'}>
@@ -306,16 +391,20 @@ export default function AdminDashboard() {
   };
 
   const renderLandingBadges = (landingPages: UserLandingPage[]) => {
-    const active = landingPages.filter((lp) => lp.is_enabled);
-    if (active.length === 0) return <span className="text-slate-500">-</span>;
+    const visible = landingPages.filter((lp) => lp.is_enabled || lp.is_expired);
+    if (visible.length === 0) return <span className="text-slate-500">-</span>;
 
     return (
       <div className="flex flex-col gap-1">
-        {active.map((lp) => (
+        {visible.map((lp) => (
           <div key={lp.id} className="text-xs text-slate-300">
             <span className="text-slate-400">{lp.template_name}:</span>{' '}
             <span className="font-mono">{lp.subdomain_slug}</span>
-            {lp.is_expired && <span className="text-red-400 ml-1">(expired)</span>}
+            {lp.is_expired && (
+              <Badge className="ml-1 bg-red-600 hover:bg-red-700 text-[10px] px-1.5 py-0">
+                Exp
+              </Badge>
+            )}
           </div>
         ))}
       </div>
@@ -352,9 +441,21 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-slate-300">
-                Aktifkan akun user, lalu kelola landing page per tier.
-              </p>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                <p className="text-sm text-slate-300">
+                  Daftarkan pelanggan baru, edit data user, dan kelola landing page.
+                </p>
+                <Button
+                  className="bg-emerald-600 hover:bg-emerald-700 shrink-0"
+                  onClick={() => {
+                    setCreateForm(EMPTY_USER_FORM);
+                    setCreateModalOpen(true);
+                  }}
+                >
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Daftar Pelanggan
+                </Button>
+              </div>
               <Input
                 type="search"
                 placeholder="Cari user..."
@@ -371,6 +472,7 @@ export default function AdminDashboard() {
                 activateLoading={activateLoading}
                 openActivateModal={openActivateModal}
                 openLandingsModal={openLandingsModal}
+                openEditModal={openEditModal}
                 setDeactivateModal={setDeactivateModal}
                 setDeleteDialog={setDeleteDialog}
                 getStatusBadge={getStatusBadge}
@@ -425,6 +527,15 @@ export default function AdminDashboard() {
                               size="icon"
                               variant="outline"
                               className="text-slate-300 border-slate-600 hover:bg-slate-700"
+                              onClick={() => openEditModal(u)}
+                              title="Edit user"
+                            >
+                              <Pencil className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="outline"
+                              className="text-slate-300 border-slate-600 hover:bg-slate-700"
                               disabled={u.status !== 'active'}
                               onClick={() => openLandingsModal(u)}
                               title="Kelola landing page"
@@ -450,6 +561,126 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </main>
+
+      <Dialog open={createModalOpen} onOpenChange={setCreateModalOpen}>
+        <DialogContent className="bg-slate-900 border-slate-800">
+          <DialogHeader>
+            <DialogTitle className="text-white">Daftar Pelanggan Baru</DialogTitle>
+            <DialogDescription className="text-slate-400">
+              Buat akun pelanggan baru. Status awal nonaktif — aktifkan setelah pendaftaran.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label className="text-slate-300">Username</Label>
+              <Input
+                className="bg-slate-800 border-slate-700 text-white mt-1"
+                value={createForm.username}
+                onChange={(e) => setCreateForm((prev) => ({ ...prev, username: e.target.value }))}
+                placeholder="contoh: pelanggan01"
+              />
+            </div>
+            <div>
+              <Label className="text-slate-300">No HP</Label>
+              <Input
+                type="tel"
+                inputMode="numeric"
+                className="bg-slate-800 border-slate-700 text-white mt-1"
+                value={createForm.phone}
+                onChange={(e) =>
+                  setCreateForm((prev) => ({ ...prev, phone: e.target.value.replace(/\D/g, '') }))
+                }
+                placeholder="08123456789"
+              />
+            </div>
+            <div>
+              <Label className="text-slate-300">Password</Label>
+              <Input
+                type="password"
+                className="bg-slate-800 border-slate-700 text-white mt-1"
+                value={createForm.password}
+                onChange={(e) => setCreateForm((prev) => ({ ...prev, password: e.target.value }))}
+                placeholder="Minimal 6 karakter"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateModalOpen(false)}>
+              Batal
+            </Button>
+            <Button
+              className="bg-emerald-600 hover:bg-emerald-700"
+              onClick={handleCreateUser}
+              disabled={createLoading}
+            >
+              {createLoading ? 'Menyimpan...' : 'Daftar'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={editModal.open}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditModal({ open: false, user: null });
+            setEditForm(EMPTY_USER_FORM);
+          }
+        }}
+      >
+        <DialogContent className="bg-slate-900 border-slate-800">
+          <DialogHeader>
+            <DialogTitle className="text-white">Edit User</DialogTitle>
+            <DialogDescription className="text-slate-400">
+              Ubah username, no HP, atau password user &quot;{editModal.user?.username}&quot;.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label className="text-slate-300">Username</Label>
+              <Input
+                className="bg-slate-800 border-slate-700 text-white mt-1"
+                value={editForm.username}
+                onChange={(e) => setEditForm((prev) => ({ ...prev, username: e.target.value }))}
+              />
+            </div>
+            <div>
+              <Label className="text-slate-300">No HP</Label>
+              <Input
+                type="tel"
+                inputMode="numeric"
+                className="bg-slate-800 border-slate-700 text-white mt-1"
+                value={editForm.phone}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, phone: e.target.value.replace(/\D/g, '') }))
+                }
+              />
+            </div>
+            <div>
+              <Label className="text-slate-300">Password Baru</Label>
+              <Input
+                type="password"
+                className="bg-slate-800 border-slate-700 text-white mt-1"
+                value={editForm.password}
+                onChange={(e) => setEditForm((prev) => ({ ...prev, password: e.target.value }))}
+                placeholder="Kosongkan jika tidak diubah"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditModal({ open: false, user: null })}>
+              Batal
+            </Button>
+            <Button
+              className="bg-emerald-600 hover:bg-emerald-700"
+              onClick={handleUpdateUser}
+              disabled={editLoading}
+            >
+              {editLoading ? 'Menyimpan...' : 'Simpan'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={activateModal.open} onOpenChange={(open) => setActivateModal({ open, user: null })}>
         <DialogContent className="bg-slate-900 border-slate-800">

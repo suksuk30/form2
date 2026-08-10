@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Trash2, Layers, Pencil } from 'lucide-react';
 import { User, UserLandingPage } from '@/lib/supabase';
+import { getAdminUserDisplayStatus } from '@/lib/admin-user-status';
 
 export default function AdminUserListMobile({
   filteredUsers,
@@ -52,7 +53,7 @@ export default function AdminUserListMobile({
                 <div className="text-white font-medium truncate">{u.username}</div>
                 <div className="text-slate-300 text-sm break-words">{u.phone}</div>
               </div>
-              <div className="flex-shrink-0">{getStatusBadge(u.status)}</div>
+              <div className="flex-shrink-0">{getStatusBadge(getAdminUserDisplayStatus(u))}</div>
             </div>
 
             <div className="mt-3 space-y-3">

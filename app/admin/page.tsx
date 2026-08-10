@@ -29,6 +29,7 @@ import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { Loader2, LogOut, Trash2, Send, Layers, UserPlus, Pencil } from 'lucide-react';
 import { LandingTemplate, User, UserLandingPage } from '@/lib/supabase';
+import { getAdminUserDisplayStatus } from '@/lib/admin-user-status';
 import { getLandingExpiryDate } from '@/lib/landing-utils';
 import AdminUserListMobile from './AdminUserListMobile';
 
@@ -107,6 +108,7 @@ export default function AdminDashboard() {
       u.username.toLowerCase().includes(term) ||
       u.phone.toLowerCase().includes(term) ||
       u.status.toLowerCase().includes(term) ||
+      getAdminUserDisplayStatus(u).toLowerCase().includes(term) ||
       landingSlugs.toLowerCase().includes(term) ||
       landingNames.toLowerCase().includes(term)
     );
@@ -504,7 +506,7 @@ export default function AdminDashboard() {
                       <TableRow key={u.id} className="border-slate-700">
                         <TableCell className="text-white font-medium">{u.username}</TableCell>
                         <TableCell className="text-slate-300">{u.phone}</TableCell>
-                        <TableCell>{getStatusBadge(u.status)}</TableCell>
+                        <TableCell>{getStatusBadge(getAdminUserDisplayStatus(u))}</TableCell>
                         <TableCell>{renderLandingBadges(u.landing_pages ?? [])}</TableCell>
                         <TableCell>
                           {u.telegram_connected ? (

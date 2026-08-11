@@ -12,6 +12,7 @@ const LEGACY_TOKPED_SUBDOMAIN_PREFIXES = ['tokped-payltr-', 'tokped-id-'] as con
 const LANDING_SUBDOMAIN_PREFIXES: Record<LandingTemplateId, string> = {
   basic: PUBLIC_SUBDOMAIN_PREFIX,
   standard: PUBLIC_SUBDOMAIN_PREFIX,
+  standard_v2: PUBLIC_SUBDOMAIN_PREFIX,
   professional: PUBLIC_SUBDOMAIN_PREFIX,
   enterprise: ENTERPRISE_SUBDOMAIN_PREFIX,
   enterprise_v2: ENTERPRISE_SUBDOMAIN_PREFIX,

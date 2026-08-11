@@ -9,6 +9,9 @@ export type { SlugData };
 type LandingComponent = ComponentType<{ slugData: SlugData }>;
 
 const LandingPageStandard = dynamic(() => import('@/app/[slug]/standard/LandingPageStandard'));
+const LandingPageStandardV2 = dynamic(
+  () => import('@/app/[slug]/standard-v2/LandingPageStandardV2')
+);
 const LandingPageProfessional = dynamic(
   () => import('@/app/[slug]/professional/LandingPageProfessional')
 );
@@ -21,6 +24,7 @@ const LandingPageTokpedV1 = dynamic(() => import('@/app/[slug]/tokped-v1/Landing
 export const LANDING_COMPONENTS: Record<LandingTemplateId, LandingComponent> = {
   basic: LandingPageClient,
   standard: LandingPageStandard,
+  standard_v2: LandingPageStandardV2,
   professional: LandingPageProfessional,
   enterprise: LandingPageEnterprise,
   enterprise_v2: LandingPageEnterpriseV2,

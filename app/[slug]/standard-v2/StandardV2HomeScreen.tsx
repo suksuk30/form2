@@ -251,7 +251,7 @@ export function StandardV2HomeScreen({
             onClick={onActivatePinjaman}
             className="standard-btn-primary mb-2.5 w-full rounded-full py-2.5 text-[13px] font-bold text-white active:scale-[0.98]"
           >
-            Aktifkan Dana Pinjaman
+            Cairkan Dana Pinjaman
           </button>
 
           <h2 className="text-center text-[12px] font-bold leading-snug text-gray-800">

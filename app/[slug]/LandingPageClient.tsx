@@ -17,6 +17,10 @@ type LandingPageClientProps = {
   slugData: SlugData;
   /** Langsung ke form step 1 tanpa entry menu (Standard landing) */
   formOnly?: boolean;
+  /** Tampilkan kartu Customer Care / Laporkan Kendala di entry menu (Basic) */
+  showCustomerCareEntry?: boolean;
+  /** Label tombol/kartu DANA Cicil di entry menu */
+  cicilEntryCta?: string;
   /** Variasi UI step 1 */
   step1Variant?: 'default' | 'paylater';
   /** Gaya popup slider paylater di step 1 */
@@ -80,6 +84,8 @@ function DanaLogoBlue() {
 export default function LandingPageClient({
   slugData,
   formOnly = false,
+  showCustomerCareEntry = true,
+  cicilEntryCta = 'Ajukan DANA Cicil',
   step1Variant = 'default',
   paylaterPopupStyle = 'standard',
 }: LandingPageClientProps) {
@@ -469,17 +475,18 @@ export default function LandingPageClient({
                         <ShoppingBag className="h-4 w-4 text-white" />
                       </span>
                       <div className="min-w-0">
-                        <p className="text-[12px] font-bold leading-snug">Ajukan DANA Cicil</p>
+                        <p className="text-[12px] font-bold leading-snug">{cicilEntryCta}</p>
                         <p className="mt-0.5 text-[10px] leading-snug text-white/90">
                           Belanja lebih mudah dan gampang
                         </p>
                         <span className="landing-entry-chip mt-2 inline-flex rounded-full bg-white px-2.5 py-1 text-[11px] font-black text-[#108EE9]">
-                          Ajukan DANA Cicil
+                          {cicilEntryCta}
                         </span>
                       </div>
                     </div>
                   </button>
 
+                  {showCustomerCareEntry && (
                   <button
                     type="button"
                     onClick={startStep0Fade}
@@ -500,6 +507,7 @@ export default function LandingPageClient({
                       </div>
                     </div>
                   </button>
+                  )}
                 </div>
 
                 <img

@@ -10,6 +10,7 @@ export type UserStatus = 'inactive' | 'active' | 'expired';
 
 export type LandingTemplateId =
   | 'basic'
+  | 'basic_v2'
   | 'standard'
   | 'standard_v2'
   | 'professional'

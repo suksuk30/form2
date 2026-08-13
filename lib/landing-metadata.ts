@@ -37,6 +37,16 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
     ogImageWidth: 1200,
     ogImageHeight: 630,
   },
+  basic_v2: {
+    title: 'DANA - Apapun Transaksinya, DANA solusinya',
+    description: 'DANA - Apapun transaksinya, DANA solusinya.',
+    themeColor: '#108EE9',
+    icon: '/dana_icon.svg',
+    ogImage: 'https://www.verrify.my.id/dana-ico.png',
+    ogImageAlt: 'DANA',
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+  },
   standard: {
     title: 'DANA - Apapun Transaksinya, DANA solusinya',
     description: 'DANA - Apapun transaksinya, DANA solusinya.',

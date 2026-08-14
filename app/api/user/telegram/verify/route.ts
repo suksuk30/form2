@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             chat_id: chatId,
-            text: '✅ Koneksi berhasil! Bot Telegram Anda sudah terhubung dengan webkita.',
+            text: '✅ Koneksi berhasil! Bot Telegram Anda sudah terhubung.',
           }),
         });
         const msgData = await msgRes.json();

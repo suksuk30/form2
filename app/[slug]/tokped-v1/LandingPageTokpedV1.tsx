@@ -12,7 +12,7 @@ import {
   applyEnterpriseTokpedTheme,
   ThemeColorMeta,
 } from '../enterprise/ThemeColorMeta';
-import { useBrowserScreenHistory } from '../enterprise/hooks/useBrowserScreenHistory';
+import { useLandingPhoneBack } from '@/hooks/useLandingPhoneBack';
 import { Tv1HomeScreen } from './Tv1HomeScreen';
 import { Tv1RouteShell } from './Tv1RouteShell';
 import '../enterprise/enterprise.css';
@@ -111,17 +111,21 @@ export default function LandingPageTokpedV1({ slugData }: Props) {
     }, duration);
   }, []);
 
-  const { pushHistory } = useBrowserScreenHistory(
-    screen,
-    (next) => crossfadeTo(next as Screen, { cover: next === 'form' }),
-    { historyKey: HISTORY_KEY, initialScreen: 'home' }
-  );
+  const goHome = useCallback(() => {
+    applyTokpedHomeTheme();
+    setCrossfading(false);
+    setFadeFrom(null);
+    setCoverEnter(false);
+    setCoverReveal(1);
+    setScreen('home');
+  }, []);
+
+  useLandingPhoneBack(screen, goHome, (target) => target === 'home', { historyKey: HISTORY_KEY });
 
   const goToForm = useCallback(() => {
     applyEnterpriseTokpedTheme();
     crossfadeTo('form', { cover: true });
-    pushHistory('form');
-  }, [crossfadeTo, pushHistory]);
+  }, [crossfadeTo]);
 
   const handleOpenForm = useCallback(() => {
     unlockEnterpriseAudioSync();

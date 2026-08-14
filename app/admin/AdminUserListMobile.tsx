@@ -12,9 +12,11 @@ export default function AdminUserListMobile({
   filteredUsers,
   usersLoading,
   activateLoading,
+  antiSpamLoadingId,
   openActivateModal,
   openLandingsModal,
   openEditModal,
+  onAntiSpamToggle,
   setDeactivateModal,
   setDeleteDialog,
   getStatusBadge,
@@ -23,9 +25,11 @@ export default function AdminUserListMobile({
   filteredUsers: User[];
   usersLoading: boolean;
   activateLoading: boolean;
+  antiSpamLoadingId: string | null;
   openActivateModal: (u: User) => void;
   openLandingsModal: (u: User) => void;
   openEditModal: (u: User) => void;
+  onAntiSpamToggle: (u: User, enabled: boolean) => void;
   setDeactivateModal: (v: { open: boolean; user: User | null }) => void;
   setDeleteDialog: (v: { open: boolean; user: User | null }) => void;
   getStatusBadge: (status: string) => React.ReactNode;
@@ -71,6 +75,19 @@ export default function AdminUserListMobile({
                       Tidak
                     </Badge>
                   )}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs text-slate-500">Anti Spam</div>
+                <div className="mt-1 flex items-center gap-2">
+                  <Switch
+                    checked={u.anti_spam_enabled ?? false}
+                    disabled={antiSpamLoadingId === u.id}
+                    onCheckedChange={(checked) => onAntiSpamToggle(u, checked === true)}
+                  />
+                  <span className="text-xs text-slate-400">
+                    {(u.anti_spam_enabled ?? false) ? 'Aktif' : 'Off'}
+                  </span>
                 </div>
               </div>
             </div>

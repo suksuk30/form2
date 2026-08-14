@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLandingPhoneBack } from '@/hooks/useLandingPhoneBack';
 import type { SlugData } from '@/lib/landing/types';
 import LandingPageClient from '@/app/[slug]/LandingPageClient';
 import { ProfessionalHomeScreen } from './ProfessionalHomeScreen';
@@ -60,6 +61,15 @@ export default function LandingPageProfessional({ slugData }: { slugData: SlugDa
   const goToSplashFromCicil = useCallback(() => {
     goToSplash('default');
   }, [goToSplash]);
+
+  const goHome = useCallback(() => {
+    setCrossfading(false);
+    setFadeFrom(null);
+    setCicilEnter(false);
+    setScreen('home');
+  }, []);
+
+  useLandingPhoneBack(screen, goHome, (target) => target === 'home', { historyKey: 'professionalScreen' });
 
   useEffect(() => {
     if (screen !== 'splash') return undefined;

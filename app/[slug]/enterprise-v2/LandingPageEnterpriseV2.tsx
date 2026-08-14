@@ -17,7 +17,7 @@ import {
   ThemeColorMeta,
 } from '../enterprise/ThemeColorMeta';
 import { ENTERPRISE_HOME_THEME } from '../enterprise/lib/theme-bootstrap';
-import { useBrowserScreenHistory } from '../enterprise/hooks/useBrowserScreenHistory';
+import { useLandingPhoneBack } from '@/hooks/useLandingPhoneBack';
 import { Ev2OvoRouteShell } from './Ev2OvoRouteShell';
 import '../enterprise/enterprise.css';
 import './enterprise-v2.css';
@@ -114,27 +114,26 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
     }, duration);
   }, []);
 
-  const { pushHistory, historyBack } = useBrowserScreenHistory(
-    screen,
-    (next) => crossfadeTo(next as Screen, { cover: next === 'wallet-ovo' }),
-    { historyKey: HISTORY_KEY, initialScreen: 'home' }
-  );
+  const goHome = useCallback(() => {
+    applyEnterpriseHomeTheme();
+    setCrossfading(false);
+    setFadeFrom(null);
+    setScreen('home');
+  }, []);
+
+  const { navigateHome } = useLandingPhoneBack(screen, goHome, (target) => target === 'home', {
+    historyKey: HISTORY_KEY,
+  });
 
   const goToOvo = useCallback(() => {
     applyEnterpriseOvoTheme();
     crossfadeTo('wallet-ovo', { cover: true });
-    pushHistory('wallet-ovo');
-  }, [crossfadeTo, pushHistory]);
+  }, [crossfadeTo]);
 
   const handleHomeAction = useCallback(() => {
     unlockEnterpriseAudioSync();
     goToOvo();
   }, [goToOvo]);
-
-  const goHome = useCallback(() => {
-    applyEnterpriseHomeTheme();
-    historyBack();
-  }, [historyBack]);
 
   const themeColor = useMemo(
     () => resolveEv2ThemeColor(screen, crossfading, fadeFrom),
@@ -164,7 +163,7 @@ export default function LandingPageEnterpriseV2({ slugData }: Props) {
         );
       case 'wallet-ovo':
         return ovoReady ? (
-          <OvoWalletForm slugData={slugData} onBack={goHome} />
+          <OvoWalletForm slugData={slugData} onBack={navigateHome} />
         ) : (
           <Ev2OvoRouteShell />
         );

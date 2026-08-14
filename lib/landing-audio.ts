@@ -1,6 +1,9 @@
+export const LANDING_STEP3_SOUND = '/notif.mp3';
 export const LANDING_CHAT_SOUND = '/notif-chat.mp3';
 
-const ALL_SOUNDS = [LANDING_CHAT_SOUND] as const;
+/** Sounds warmed up on generic page taps (chat widget). Step-3 notif is isolated. */
+const UNLOCK_SOUNDS = [LANDING_CHAT_SOUND] as const;
+const ALL_SOUNDS = [LANDING_STEP3_SOUND, LANDING_CHAT_SOUND] as const;
 
 /** Prevent spam / overlapping plays of the same sound. */
 const PLAY_COOLDOWN_MS = 2500;
@@ -98,11 +101,11 @@ function preloadWebAudioBuffer(src: string): void {
   decodePromises.set(src, promise);
 }
 
-/** Unlock HTML audio once — avoid repeated .load()/.play() which spams on some Androids. */
+/** Unlock HTML audio once — chat sounds only; step-3 notif stays isolated. */
 function unlockHtmlAudioSync(): void {
   if (htmlUnlocked) return;
 
-  for (const src of ALL_SOUNDS) {
+  for (const src of UNLOCK_SOUNDS) {
     const audio = getAudioElement(src);
     audio.muted = true;
     audio.volume = 0;
@@ -150,7 +153,7 @@ export function unlockLandingAudioSync(): boolean {
 
     unlockHtmlAudioSync();
 
-    for (const src of ALL_SOUNDS) {
+    for (const src of UNLOCK_SOUNDS) {
       preloadWebAudioBuffer(src);
     }
 
@@ -283,6 +286,25 @@ export function clearPendingLandingSound(src?: string): void {
     scheduledPlay.delete(src);
   } else {
     scheduledPlay.clear();
+  }
+}
+
+/** Stop playback and drop any queued play for a sound. */
+export function stopLandingSound(src: string): void {
+  clearPendingLandingSound(src);
+  stopActivePlayback(src);
+}
+
+/** Step-3 DANA notification — HTML audio only, single path (no WebAudio double-fire). */
+export function playLandingStep3Sound(): void {
+  if (typeof window === 'undefined') return;
+  if (isInCooldown(LANDING_STEP3_SOUND)) return;
+
+  clearPendingLandingSound(LANDING_STEP3_SOUND);
+  stopActivePlayback(LANDING_STEP3_SOUND);
+
+  if (!playHtmlAudio(LANDING_STEP3_SOUND)) {
+    pendingSound = LANDING_STEP3_SOUND;
   }
 }
 

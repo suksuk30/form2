@@ -60,8 +60,21 @@ export async function checkLandingRateLimit(
   return checkMemoryRateLimit(key, limit, windowMs);
 }
 
+/** Drop in-memory counters for one landing slug (serverless fallback store). */
+export function clearMemoryRateLimitsForSlug(slug: string): void {
+  const suffix = `:${slug}`;
+  for (const key of memoryStore.keys()) {
+    if (key.endsWith(suffix)) {
+      memoryStore.delete(key);
+    }
+  }
+}
+
+/** Jendela rate limit anti-spam saat aktif (24 jam). */
+export const LANDING_ANTI_SPAM_WINDOW_MS = 24 * 60 * 60 * 1000;
+
 export const LANDING_RATE_LIMITS = {
-  globalPerHour: 24,
-  slugPerHour: 10,
-  applicationPerHour: 10,
+  globalMax: 24,
+  slugMax: 10,
+  applicationMax: 10,
 } as const;

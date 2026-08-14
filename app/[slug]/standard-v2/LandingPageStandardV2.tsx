@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useLandingPhoneBack } from '@/hooks/useLandingPhoneBack';
 import type { SlugData } from '@/lib/landing/types';
 import { StandardV2HomeScreen } from './StandardV2HomeScreen';
 import { StandardCicilScreen } from '../standard/StandardCicilScreen';
@@ -85,6 +86,16 @@ export default function LandingPageStandardV2({ slugData }: { slugData: SlugData
     setFormPath('cicil');
     crossfadeTo('splash');
   }, [crossfadeTo]);
+
+  const goHome = useCallback(() => {
+    clearCrossfadeTimer();
+    setUnderScreen(null);
+    setCrossfading(false);
+    setCicilEnter(false);
+    setScreen('home');
+  }, []);
+
+  useLandingPhoneBack(screen, goHome, (target) => target === 'home', { historyKey: 'standardV2Screen' });
 
   useEffect(() => {
     return () => clearCrossfadeTimer();

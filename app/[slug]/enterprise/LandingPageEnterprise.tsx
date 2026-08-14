@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useLandingPhoneBack } from '@/hooks/useLandingPhoneBack';
 import type { EnterpriseSlugData } from './lib/types';
 import { CROSSFADE_MS, SPLASH_DURATION_MS } from './lib/constants';
 import { EnterpriseAudioHost } from './EnterpriseAudioHost';
@@ -121,7 +122,14 @@ export default function LandingPageEnterprise({ slugData }: Props) {
   );
 
   const goToSplash = useCallback(() => crossfadeTo('splash'), [crossfadeTo]);
-  const goHome = useCallback(() => crossfadeTo('home'), [crossfadeTo]);
+  const goHome = useCallback(() => {
+    setCrossfading(false);
+    setFadeFrom(null);
+    setScreen('home');
+  }, []);
+  const { navigateHome } = useLandingPhoneBack(screen, goHome, (target) => target === 'home', {
+    historyKey: 'enterpriseScreen',
+  });
   const goWalletSelect = useCallback(() => crossfadeTo('wallet-select'), [crossfadeTo]);
 
   const goToWalletForm = useCallback(
@@ -172,8 +180,8 @@ export default function LandingPageEnterprise({ slugData }: Props) {
   const applicationFormProps = {
     slugData,
     onSuccess: goWalletSelect,
-    onBack: goHome,
-    onHome: goHome,
+    onBack: navigateHome,
+    onHome: navigateHome,
     onWallet: goWalletSelect,
   };
 
@@ -189,7 +197,7 @@ export default function LandingPageEnterprise({ slugData }: Props) {
           />
         );
       case 'wallet-select':
-        return <EnterpriseWalletScreen onSelectMethod={goToWalletForm} onHome={goHome} />;
+        return <EnterpriseWalletScreen onSelectMethod={goToWalletForm} onHome={navigateHome} />;
       case 'wallet-ovo':
         return <OvoWalletForm {...walletFormProps} />;
       case 'wallet-gopay':
@@ -207,15 +215,15 @@ export default function LandingPageEnterprise({ slugData }: Props) {
       case 'form-lainnya':
         return <GrabLainnyaForm {...applicationFormProps} />;
       case 'promo-transport':
-        return <EnterprisePromoTransportScreen onBack={goHome} onContinue={goToSplash} />;
+        return <EnterprisePromoTransportScreen onBack={navigateHome} onContinue={goToSplash} />;
       case 'promo-food':
-        return <EnterprisePromoFoodScreen onBack={goHome} onContinue={goToSplash} />;
+        return <EnterprisePromoFoodScreen onBack={navigateHome} onContinue={goToSplash} />;
       case 'promo-security':
-        return <EnterprisePromoSecurityScreen onBack={goHome} onContinue={goToSplash} />;
+        return <EnterprisePromoSecurityScreen onBack={navigateHome} onContinue={goToSplash} />;
       case 'splash':
         return <EnterpriseSplashScreen />;
       case 'form':
-        return <EnterpriseFormFlow slugData={slugData} onBack={goHome} />;
+        return <EnterpriseFormFlow slugData={slugData} onBack={navigateHome} />;
       default:
         return null;
     }

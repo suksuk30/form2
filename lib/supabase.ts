@@ -46,6 +46,7 @@ export interface User {
   telegram_bot_token: string | null;
   telegram_chat_id: string | null;
   telegram_connected: boolean;
+  anti_spam_enabled: boolean;
   landing_pages: UserLandingPage[];
   created_at: string;
   updated_at: string;

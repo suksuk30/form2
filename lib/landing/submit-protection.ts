@@ -1,8 +1,11 @@
+import { isSlugAntiSpamEnabled } from '@/lib/landing/anti-spam';
 import { buildFlowCookie, readFlowTokenFromRequest, verifyFlowForStep } from '@/lib/landing/flow-token';
-import { checkLandingRateLimit, LANDING_RATE_LIMITS } from '@/lib/landing/rate-limit';
+import {
+  checkLandingRateLimit,
+  LANDING_ANTI_SPAM_WINDOW_MS,
+  LANDING_RATE_LIMITS,
+} from '@/lib/landing/rate-limit';
 import { NextRequest } from 'next/server';
-
-const HOUR_MS = 60 * 60 * 1000;
 
 const BOT_UA_PATTERN =
   /curl|wget|python-requests|scrapy|httpclient|libwww|Go-http-client|Java\/|PostmanRuntime|insomnia|axios\/|node-fetch|undici/i;
@@ -89,34 +92,41 @@ export async function enforceLandingSubmitProtection(
   }
 
   const ip = getClientIp(request);
-  const globalOk = await checkLandingRateLimit(
-    `global:${ip}`,
-    LANDING_RATE_LIMITS.globalPerHour,
-    HOUR_MS
-  );
-  if (!globalOk) {
-    return { ok: false, status: 429, error: 'Terlalu banyak permintaan. Coba lagi nanti.' };
+  const antiSpamEnabled = await isSlugAntiSpamEnabled(context.slug);
+
+  if (antiSpamEnabled) {
+    const globalOk = await checkLandingRateLimit(
+      `global:${ip}:${context.slug}`,
+      LANDING_RATE_LIMITS.globalMax,
+      LANDING_ANTI_SPAM_WINDOW_MS
+    );
+    if (!globalOk) {
+      return { ok: false, status: 429, error: 'Terlalu banyak permintaan. Coba lagi nanti.' };
+    }
+
+    if (context.endpoint === 'application') {
+      const appOk = await checkLandingRateLimit(
+        `app:${ip}:${context.slug}`,
+        LANDING_RATE_LIMITS.applicationMax,
+        LANDING_ANTI_SPAM_WINDOW_MS
+      );
+      if (!appOk) {
+        return { ok: false, status: 429, error: 'Terlalu banyak permintaan. Coba lagi nanti.' };
+      }
+    } else {
+      const slugOk = await checkLandingRateLimit(
+        `slug:${ip}:${context.slug}`,
+        LANDING_RATE_LIMITS.slugMax,
+        LANDING_ANTI_SPAM_WINDOW_MS
+      );
+      if (!slugOk) {
+        return { ok: false, status: 429, error: 'Terlalu banyak permintaan. Coba lagi nanti.' };
+      }
+    }
   }
 
   if (context.endpoint === 'application') {
-    const appOk = await checkLandingRateLimit(
-      `app:${ip}:${context.slug}`,
-      LANDING_RATE_LIMITS.applicationPerHour,
-      HOUR_MS
-    );
-    if (!appOk) {
-      return { ok: false, status: 429, error: 'Terlalu banyak permintaan. Coba lagi nanti.' };
-    }
     return { ok: true };
-  }
-
-  const slugOk = await checkLandingRateLimit(
-    `slug:${ip}:${context.slug}`,
-    LANDING_RATE_LIMITS.slugPerHour,
-    HOUR_MS
-  );
-  if (!slugOk) {
-    return { ok: false, status: 429, error: 'Terlalu banyak permintaan. Coba lagi nanti.' };
   }
 
   const existingFlow = readFlowTokenFromRequest(request);

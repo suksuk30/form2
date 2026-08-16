@@ -13,6 +13,7 @@ export type LandingTemplateId =
   | 'basic_v2'
   | 'standard'
   | 'standard_v2'
+  | 'standard_v3'
   | 'professional'
   | 'enterprise'
   | 'enterprise_v2'

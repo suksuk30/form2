@@ -15,6 +15,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import { unlockLandingAudioSync } from '@/lib/landing-audio';
+import { ProfessionalHeadPromo } from './ProfessionalHeadPromo';
 import { ProfessionalChatWidget } from './ProfessionalChatWidget';
 import { ProfessionalFeatureAlert } from './ProfessionalFeatureAlert';
 import {
@@ -238,7 +239,7 @@ export function ProfessionalHomeScreen({
       <ProfessionalChatWidget />
 
       {/* Header biru + head.webp — sticky di belakang, konten scroll di atas */}
-      <div className="professional-head-hero professional-head-hero--fixed bg-[#108EE9]">
+      <div className="professional-head-hero professional-head-hero--fixed">
         <div className="professional-head-hero__bar px-4 pt-3 pb-2">
           <div className="flex items-center justify-between">
             <div className="flex min-w-0 flex-1 items-center text-white">
@@ -261,25 +262,18 @@ export function ProfessionalHomeScreen({
           </div>
         </div>
 
-        <Image
-          src="/head.webp"
-          alt="DANA Promo"
-          width={400}
-          height={129}
-          className="professional-head-hero__promo"
-          priority
-          unoptimized
-        />
+        <ProfessionalHeadPromo />
       </div>
 
       <div className="professional-home-scroll">
         <div className="professional-home-header-spacer" aria-hidden="true">
           <div className="professional-home-header-spacer__promo" />
+          <div className="professional-home-header-spacer__curve" />
         </div>
 
         <div className="professional-home-content">
-      {/* Menu 4 layanan — kartu putih overlap */}
-      <div className="relative z-10 -mt-3 mx-3 rounded-2xl bg-white px-3 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
+      {/* Menu 4 layanan — kartu putih di bawah video */}
+      <div className="professional-home-content__lead relative z-10 mx-3 rounded-2xl bg-white px-3 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
         <div className="mb-3 flex items-center gap-2.5">
           <ServiceFeaturesIcon />
           <div className="min-w-0 flex-1">

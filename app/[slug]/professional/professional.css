@@ -4,6 +4,9 @@
   --pro-blue: #108ee9;
   --pro-blue-dark: #065b9e;
   --pro-blue-deep: #004c7a;
+  --pro-head-blue: #1c88e3;
+  --pro-head-curve: #37b5cb;
+  --pro-head-curve-height: 1.75rem;
   --pro-gold: #f5c451;
   --pro-bg: #eef1f6;
   --pro-safe-top: env(safe-area-inset-top, 0px);
@@ -32,7 +35,7 @@
 
 /* Header + head.webp — fixed di belakang, konten scroll di atasnya */
 .professional-head-hero {
-  --head-gif-blue: #3d9cea;
+  --head-gif-blue: var(--pro-head-blue);
   background: var(--head-gif-blue);
   padding-top: var(--pro-safe-top);
 }
@@ -40,23 +43,37 @@
 .professional-head-hero--fixed {
   position: fixed;
   top: 0;
-  left: 50%;
+  left: 0;
+  right: 0;
   z-index: 0;
   width: 100%;
   max-width: 28rem;
-  transform: translateX(-50%);
+  margin-inline: auto;
   pointer-events: none;
 }
 
 .professional-head-hero--fixed .professional-head-hero__bar,
-.professional-head-hero--fixed .professional-head-hero__promo {
+.professional-head-hero--fixed .professional-head-hero__promo-wrap {
   pointer-events: auto;
 }
 
-.professional-head-hero__promo {
+.professional-head-hero__promo-wrap {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  overflow: hidden;
+  background: var(--head-gif-blue);
+  aspect-ratio: var(--head-promo-aspect, 816 / 302);
+}
+
+.professional-head-hero__promo,
+.professional-head-hero__promo-video,
+.professional-head-hero__promo--fallback {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
 }
 
 .professional-home-view {
@@ -85,7 +102,37 @@
 .professional-home-header-spacer__promo {
   display: block;
   width: 100%;
-  aspect-ratio: 400 / 129;
+  aspect-ratio: var(--head-promo-aspect, 816 / 302);
+}
+
+.professional-home-header-spacer__curve {
+  display: block;
+  width: 100%;
+  height: var(--pro-head-curve-height);
+}
+
+.professional-head-curve {
+  position: relative;
+  z-index: 1;
+  margin-top: -1px;
+  line-height: 0;
+  color: var(--pro-head-curve, #37b5cb);
+  filter: drop-shadow(0 3px 6px rgba(55, 181, 203, 0.12));
+  pointer-events: none;
+}
+
+.professional-head-curve__svg {
+  display: block;
+  width: 100%;
+  height: var(--pro-head-curve-height);
+}
+
+.professional-home-content__lead {
+  margin-top: calc(-1 * var(--pro-head-curve-height));
+}
+
+.professional-head-curve__svg path {
+  fill: currentColor;
 }
 
 .professional-home-content {

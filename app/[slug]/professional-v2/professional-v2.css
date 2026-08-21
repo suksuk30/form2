@@ -8,7 +8,7 @@
 }
 
 .pro-v2-header-spacer {
-  padding-top: calc(var(--pro-safe-top) + 3rem);
+  padding-top: calc(var(--pro-safe-top) + 3.25rem);
 }
 
 .pro-v2-feed-toast__card {

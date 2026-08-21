@@ -13,6 +13,7 @@ import {
 import { unlockLandingAudioSync } from '@/lib/landing-audio';
 import { ProfessionalChatWidget } from '../professional/ProfessionalChatWidget';
 import { ProfessionalFeatureAlert } from '../professional/ProfessionalFeatureAlert';
+import { ProfessionalHeadPromo } from '../professional/ProfessionalHeadPromo';
 import { ProfessionalV2FeedToast } from './ProfessionalV2FeedToast';
 import { ProfessionalV2BannerSlider } from './ProfessionalV2BannerSlider';
 import { ProfessionalV2Announcement } from './ProfessionalV2Announcement';
@@ -165,8 +166,8 @@ export function ProfessionalV2HomeScreen({
       <ProfessionalChatWidget />
       <ProfessionalV2FeedToast />
 
-      <div className="professional-head-hero professional-head-hero--fixed bg-[#108EE9]">
-        <div className="professional-head-hero__bar px-4 pt-[calc(0.75rem+var(--pro-safe-top))] pb-2">
+      <div className="professional-head-hero professional-head-hero--fixed">
+        <div className="professional-head-hero__bar px-4 pt-3 pb-2">
           <div className="flex items-center justify-between">
             <Image
               src="/dana_logo.svg"
@@ -186,24 +187,17 @@ export function ProfessionalV2HomeScreen({
           </div>
         </div>
 
-        <Image
-          src="/head.webp"
-          alt="DANA Promo"
-          width={400}
-          height={129}
-          className="professional-head-hero__promo"
-          priority
-          unoptimized
-        />
+        <ProfessionalHeadPromo />
       </div>
 
       <div className="professional-home-scroll">
         <div className="professional-home-header-spacer pro-v2-header-spacer" aria-hidden="true">
           <div className="professional-home-header-spacer__promo" />
+          <div className="professional-home-header-spacer__curve" />
         </div>
 
         <div className="professional-home-content">
-          <div className="relative z-10 -mt-3 mx-3 rounded-[22px] bg-white px-3 py-3.5 shadow-[0_4px_24px_rgba(0,0,0,0.08)]">
+          <div className="professional-home-content__lead relative z-10 mx-3 rounded-[22px] bg-white px-3 py-3.5 shadow-[0_4px_24px_rgba(0,0,0,0.08)]">
             <div className="mb-3 flex items-center gap-2.5">
               <ServiceFeaturesIcon />
               <div className="min-w-0 flex-1">

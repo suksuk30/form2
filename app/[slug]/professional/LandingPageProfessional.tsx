@@ -117,7 +117,7 @@ export default function LandingPageProfessional({ slugData }: { slugData: SlugDa
   const showUnderlay = crossfading && fadeFrom !== null;
 
   return (
-    <div className="relative mx-auto min-h-screen w-full max-w-md overflow-hidden bg-[#108EE9]">
+    <div className="relative mx-auto min-h-screen w-full max-w-md overflow-hidden bg-[#1c88e3]">
       {showUnderlay && fadeFrom && (
         <div
           className="absolute inset-0 z-10 transition-opacity ease-in-out"

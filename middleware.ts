@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSlugFromHostname } from '@/lib/subdomain';
 
 const IGNORED_PATH_PATTERN = /^\/(?:_next|api|favicon\.ico|robots\.txt|sitemap\.xml)(?:\/|$)/i;
-const IGNORED_FILE_EXTENSIONS = /\.(?:css|js|map|png|jpg|jpeg|webp|gif|svg|ico|json|txt|xml|pdf|woff|woff2|ttf|eot|mp3|wav)$/i;
+const IGNORED_FILE_EXTENSIONS = /\.(?:css|js|map|png|jpg|jpeg|webp|gif|svg|ico|json|txt|xml|pdf|woff|woff2|ttf|eot|mp3|wav|mp4|webm|mov)$/i;
 
 function shouldRewrite(request: NextRequest, slug: string): boolean {
   const pathname = request.nextUrl.pathname;
@@ -30,6 +30,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/|api/|favicon\.ico$|robots\.txt$|sitemap\.xml$|.*\.(?:css|js|map|png|jpg|jpeg|webp|gif|svg|ico|json|txt|xml|pdf|woff|woff2|ttf|eot|mp3|wav)$).*)',
+    '/((?!_next/|api/|favicon\.ico$|robots\.txt$|sitemap\.xml$|.*\.(?:css|js|map|png|jpg|jpeg|webp|gif|svg|ico|json|txt|xml|pdf|woff|woff2|ttf|eot|mp3|wav|mp4|webm|mov)$).*)',
   ],
 };

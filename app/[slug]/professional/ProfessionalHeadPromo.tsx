@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ProfessionalHeadCurve } from './ProfessionalHeadCurve';
 
-const VIDEO_MP4 = '/head.mp4';
+const VIDEO_MP4 = '/head.mp4?v=2';
 const FALLBACK_IMAGE = '/head.webp';
 
 /** Potong ~10% bagian atas video agar konten promo tidak tertutup kartu putih */

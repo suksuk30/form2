@@ -87,6 +87,16 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
     ogImageWidth: 1200,
     ogImageHeight: 630,
   },
+  professional_v2: {
+    title: 'DANA - Apapun Transaksinya, DANA solusinya',
+    description: 'DANA - Apapun transaksinya, DANA solusinya.',
+    themeColor: '#108EE9',
+    icon: '/dana_icon.svg',
+    ogImage: '/dana-ico.png',
+    ogImageAlt: 'DANA',
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+  },
   enterprise: {
     title: 'Grab. Satu aplikasi semua bisa',
     description: 'Formulir pengajuan reimbursement.',

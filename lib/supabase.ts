@@ -15,6 +15,7 @@ export type LandingTemplateId =
   | 'standard_v2'
   | 'standard_v3'
   | 'professional'
+  | 'professional_v2'
   | 'enterprise'
   | 'enterprise_v2'
   | 'tokped_v1';

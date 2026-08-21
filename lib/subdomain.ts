@@ -16,6 +16,7 @@ const LANDING_SUBDOMAIN_PREFIXES: Record<LandingTemplateId, string> = {
   standard_v2: PUBLIC_SUBDOMAIN_PREFIX,
   standard_v3: PUBLIC_SUBDOMAIN_PREFIX,
   professional: PUBLIC_SUBDOMAIN_PREFIX,
+  professional_v2: PUBLIC_SUBDOMAIN_PREFIX,
   enterprise: ENTERPRISE_SUBDOMAIN_PREFIX,
   enterprise_v2: ENTERPRISE_SUBDOMAIN_PREFIX,
   tokped_v1: TOKPED_SUBDOMAIN_PREFIX,

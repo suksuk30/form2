@@ -1,0 +1,50 @@
+/* Professional V2 — Pusat Layanan homescreen */
+
+.pro-v2-home-view {
+  position: relative;
+  min-height: 100dvh;
+  min-height: 100vh;
+  background: #eef1f6;
+}
+
+.pro-v2-header-spacer {
+  padding-top: calc(var(--pro-safe-top) + 3rem);
+}
+
+.pro-v2-feed-toast__card {
+  animation: proV2ToastEnter 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.pro-v2-feed-toast__card--exit {
+  animation: proV2ToastExit 0.28s ease-in forwards;
+}
+
+@keyframes proV2ToastEnter {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes proV2ToastExit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+}
+
+.pro-v2-service-card {
+  border-left: 3px solid rgba(16, 142, 233, 0.35);
+}
+
+.pro-v2-service-card:active {
+  background: #fafcff;
+}

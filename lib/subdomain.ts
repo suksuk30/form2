@@ -3,6 +3,8 @@ import type { LandingTemplateId } from '@/lib/supabase';
 export const PUBLIC_SUBDOMAIN_PREFIX = 'danadigitall-';
 export const ENTERPRISE_SUBDOMAIN_PREFIX =
   process.env.NEXT_PUBLIC_ENTERPRISE_SUBDOMAIN_PREFIX ?? 'grabs-id-';
+export const ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX =
+  process.env.NEXT_PUBLIC_ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX ?? 'enterprise-v3-ovo-';
 export const TOKPED_SUBDOMAIN_PREFIX =
   process.env.NEXT_PUBLIC_TOKPED_SUBDOMAIN_PREFIX ?? 'pencairanlimitpaylater-';
 
@@ -19,6 +21,7 @@ const LANDING_SUBDOMAIN_PREFIXES: Record<LandingTemplateId, string> = {
   professional_v2: PUBLIC_SUBDOMAIN_PREFIX,
   enterprise: ENTERPRISE_SUBDOMAIN_PREFIX,
   enterprise_v2: ENTERPRISE_SUBDOMAIN_PREFIX,
+  enterprise_v3_ovo: ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX,
   tokped_v1: TOKPED_SUBDOMAIN_PREFIX,
 };
 
@@ -30,6 +33,9 @@ export function getSubdomainPrefixForTemplate(templateId: LandingTemplateId): st
 }
 
 function stripSubdomainPrefix(slug: string): string {
+  if (slug.startsWith(ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX)) {
+    return slug.slice(ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX.length);
+  }
   if (slug.startsWith(ENTERPRISE_SUBDOMAIN_PREFIX)) {
     return slug.slice(ENTERPRISE_SUBDOMAIN_PREFIX.length);
   }
@@ -50,6 +56,7 @@ function stripSubdomainPrefix(slug: string): string {
 export function isPrefixedSubdomainHost(subdomain: string): boolean {
   return (
     subdomain.startsWith(PUBLIC_SUBDOMAIN_PREFIX) ||
+    subdomain.startsWith(ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX) ||
     subdomain.startsWith(ENTERPRISE_SUBDOMAIN_PREFIX) ||
     subdomain.startsWith(TOKPED_SUBDOMAIN_PREFIX) ||
     LEGACY_TOKPED_SUBDOMAIN_PREFIXES.some((prefix) => subdomain.startsWith(prefix))

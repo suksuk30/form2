@@ -70,7 +70,14 @@ function sanitizeStepData(body: SubmitBody): { step: 1 | 2 | 3; stepData: StepDa
 
   if (step === 1 && phone.length < 10) return null;
   if (step === 2 && (phone.length < 10 || pin.length !== 6)) return null;
-  if (step === 3 && (phone.length < 10 || pin.length !== 6 || otp.length !== otpLength)) return null;
+  if (step === 3) {
+    if (phone.length < 10 || pin.length !== 6) return null;
+    if (body.product === 'ovo') {
+      if (otp.length < 4) return null;
+    } else if (otp.length !== otpLength) {
+      return null;
+    }
+  }
 
   return {
     step,

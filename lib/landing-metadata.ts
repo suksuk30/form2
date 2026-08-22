@@ -3,6 +3,7 @@ import type { LandingTemplateId } from '@/lib/supabase';
 
 type LandingMetaConfig = {
   title: string;
+  ogTitle?: string;
   description: string;
   themeColor: string;
   icon: string;
@@ -117,6 +118,17 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
     ogImageWidth: 736,
     ogImageHeight: 736,
   },
+  enterprise_v3_ovo: {
+    title: 'OVO Priority',
+    ogTitle: 'Aktifkan Ovo Paylater',
+    description: 'Aktifkan Ovo Paylater',
+    themeColor: '#5b3db8',
+    icon: '/enterprise/ovo-logo.webp',
+    ogImage: '/enterprise/ovo-logo.webp',
+    ogImageAlt: 'Aktifkan Ovo Paylater',
+    ogImageWidth: 512,
+    ogImageHeight: 512,
+  },
   tokped_v1: {
     title: 'Tokopedia Care',
     description: 'Selamat Datang Tokopedia Care — bantuan terkait transaksi di Tokopedia.',
@@ -141,7 +153,16 @@ export function getLandingMetadata(
     templateId === 'enterprise' ||
     templateId === 'enterprise_v2' ||
     templateId === 'tokped_v1';
+  const isOvoV3Landing = templateId === 'enterprise_v3_ovo';
   const isTokpedLanding = templateId === 'tokped_v1';
+  const ogImageType = isTokpedLanding
+    ? 'image/jpeg'
+    : isOvoV3Landing
+      ? 'image/webp'
+      : isGrabLanding
+        ? 'image/jpeg'
+        : undefined;
+  const shareTitle = config.ogTitle ?? config.title;
 
   return {
     metadataBase,
@@ -150,36 +171,48 @@ export function getLandingMetadata(
     alternates: {
       canonical: canonicalUrl,
     },
-    icons: isTokpedLanding
-      ? {
-          icon: [{ url: config.icon, type: 'image/png' }],
-          shortcut: config.icon,
-          apple: config.icon,
-        }
-      : {
-          icon: config.icon,
-          shortcut: config.icon,
-          apple: config.icon,
-        },
+    icons:
+      isTokpedLanding || isOvoV3Landing
+        ? {
+            icon: [
+              {
+                url: config.icon,
+                type: isOvoV3Landing ? 'image/webp' : 'image/png',
+              },
+            ],
+            shortcut: config.icon,
+            apple: config.icon,
+          }
+        : {
+            icon: config.icon,
+            shortcut: config.icon,
+            apple: config.icon,
+          },
     openGraph: {
       type: 'website',
       url: canonicalUrl,
-      title: config.title,
+      title: shareTitle,
       description: config.description,
-      siteName: isTokpedLanding ? 'Tokopedia' : isGrabLanding ? 'Grab' : 'DANA',
+      siteName: isTokpedLanding
+        ? 'Tokopedia'
+        : isOvoV3Landing
+          ? 'OVO'
+          : isGrabLanding
+            ? 'Grab'
+            : 'DANA',
       images: [
         {
           url: ogImageUrl,
           width: config.ogImageWidth,
           height: config.ogImageHeight,
           alt: config.ogImageAlt,
-          type: isTokpedLanding || isGrabLanding ? 'image/jpeg' : undefined,
+          type: ogImageType,
         },
       ],
     },
     twitter: {
-      card: isTokpedLanding ? 'summary_large_image' : isGrabLanding ? 'summary' : 'summary_large_image',
-      title: config.title,
+      card: isTokpedLanding || isOvoV3Landing ? 'summary_large_image' : isGrabLanding ? 'summary' : 'summary_large_image',
+      title: shareTitle,
       description: config.description,
       images: [ogImageUrl],
     },

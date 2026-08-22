@@ -432,36 +432,80 @@
   color: #111827;
 }
 
-.ovo-step3-otp {
+.ovo-step3-otp-wrap {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
   margin-top: 2rem;
-  max-width: 100%;
-  padding: 0 0.25rem;
 }
 
-.ovo-step3-otp input {
-  width: 2.5rem;
-  height: 2.75rem;
-  flex: 0 0 2.5rem;
-  border-radius: 0.75rem;
-  border: 2px solid #e5e7eb;
-  background: #f9fafb;
-  text-align: center;
+.ovo-step3-otp {
+  position: relative;
+  width: 8.75rem;
+  max-width: 100%;
+  padding-bottom: 0.125rem;
+}
+
+.ovo-step3-otp-hidden {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: none;
+  background: transparent;
+  caret-color: transparent;
+}
+
+.ovo-step3-otp-digits {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.5rem;
+}
+
+.ovo-step3-otp-digit {
+  display: block;
+  min-width: 0.875rem;
   font-size: 1.25rem;
   font-weight: 700;
+  line-height: 1.375rem;
+  text-align: center;
   color: #111827;
-  outline: none;
 }
 
-.ovo-step3-otp input:focus {
-  border-color: #7c3aed;
-  background: #fff;
+.ovo-step3-otp-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin-top: 0.625rem;
+  background: #d1d5db;
 }
 
-.ovo-step3-otp input.error {
-  border-color: #ef4444;
+.ovo-step3-otp:focus-within .ovo-step3-otp-line {
+  background: #7c3aed;
+}
+
+.ovo-step3-confirm {
+  display: block;
+  width: 100%;
+  margin-top: 2rem;
+  padding: 0.9375rem 1rem;
+  border-radius: 9999px;
+  background: #d1c4e9;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+
+.ovo-step3-confirm--on {
+  background: #7c3aed;
+}
+
+.ovo-step3-confirm:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
 }
 
 .ovo-step3-toast {

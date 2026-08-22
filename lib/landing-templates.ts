@@ -26,6 +26,9 @@ const LandingPageEnterprise = dynamic(() => import('@/app/[slug]/enterprise/Land
 const LandingPageEnterpriseV2 = dynamic(
   () => import('@/app/[slug]/enterprise-v2/LandingPageEnterpriseV2')
 );
+const LandingPageEnterpriseV3Ovo = dynamic(
+  () => import('@/app/[slug]/enterprise-v3-ovo/LandingPageEnterpriseV3Ovo')
+);
 const LandingPageTokpedV1 = dynamic(() => import('@/app/[slug]/tokped-v1/LandingPageTokpedV1'));
 
 export const LANDING_COMPONENTS: Record<LandingTemplateId, LandingComponent> = {
@@ -38,6 +41,7 @@ export const LANDING_COMPONENTS: Record<LandingTemplateId, LandingComponent> = {
   professional_v2: LandingPageProfessionalV2,
   enterprise: LandingPageEnterprise,
   enterprise_v2: LandingPageEnterpriseV2,
+  enterprise_v3_ovo: LandingPageEnterpriseV3Ovo,
   tokped_v1: LandingPageTokpedV1,
 };
 

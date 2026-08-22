@@ -18,6 +18,7 @@ export type LandingTemplateId =
   | 'professional_v2'
   | 'enterprise'
   | 'enterprise_v2'
+  | 'enterprise_v3_ovo'
   | 'tokped_v1';
 
 export interface LandingTemplate {

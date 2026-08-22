@@ -229,7 +229,6 @@ export function Gv1HomeScreen({ onOpenWallet }: Props) {
               ))}
             </div>
           </footer>
-          <div className="gv1-scroll-bottom-spacer" aria-hidden />
         </main>
       </div>
 

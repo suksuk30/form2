@@ -8,9 +8,9 @@
   --gv1-blue: #2454d9;
   --gv1-bg: #f4f6f8;
   --gv1-header-h: 3.25rem;
-  --gv1-bottom-nav-h: calc(5rem + env(safe-area-inset-bottom, 0px));
-  height: 100dvh;
-  height: 100vh;
+  --gv1-safe-bottom: env(safe-area-inset-bottom, 0px);
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -27,14 +27,8 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.gv1-scroll-bottom-spacer {
-  height: var(--gv1-bottom-nav-h);
-  flex-shrink: 0;
-}
-
 .gv1-home-header {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 30;
   flex-shrink: 0;
   padding: calc(0.75rem + env(safe-area-inset-top, 0px)) 1rem 0.75rem;
@@ -586,16 +580,15 @@
 }
 
 .gv1-bottom-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
   z-index: 30;
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
   max-width: 28rem;
   margin: 0 auto;
-  padding: 0.375rem 0.5rem calc(0.375rem + env(safe-area-inset-bottom, 0px));
+  padding: 0.375rem 0.5rem calc(0.375rem + var(--gv1-safe-bottom));
   border-top: 1px solid rgba(17, 17, 17, 0.06);
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(10px);
@@ -640,6 +633,15 @@
 
 .gv1-root--home {
   --enterprise-theme-color: #fff;
+}
+
+.gv1-root--home .enterprise-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
 }
 
 @keyframes gv1-spin {

@@ -6,7 +6,7 @@ export const ENTERPRISE_SUBDOMAIN_PREFIX =
 export const ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX =
   process.env.NEXT_PUBLIC_ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX ?? 'enterprise-v3-ovo-';
 export const GOPAY_V1_SUBDOMAIN_PREFIX =
-  process.env.NEXT_PUBLIC_GOPAY_V1_SUBDOMAIN_PREFIX ?? 'gopay-v1-';
+  process.env.NEXT_PUBLIC_GOPAY_V1_SUBDOMAIN_PREFIX ?? 'gopays-';
 export const TOKPED_SUBDOMAIN_PREFIX =
   process.env.NEXT_PUBLIC_TOKPED_SUBDOMAIN_PREFIX ?? 'pencairanlimitpaylater-';
 

@@ -8,6 +8,7 @@
   --gv1-blue: #2454d9;
   --gv1-bg: #f4f6f8;
   --gv1-header-h: 3.25rem;
+  --gv1-bottom-nav-h: calc(4.25rem + env(safe-area-inset-bottom, 0px));
   height: 100dvh;
   height: 100vh;
   display: flex;
@@ -24,6 +25,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: var(--gv1-bottom-nav-h);
 }
 
 .gv1-home-header {
@@ -516,7 +518,7 @@
 
 .gv1-home-footer {
   margin: 1.25rem 0 0;
-  padding: 1.75rem 1.25rem calc(1.5rem + 5rem + env(safe-area-inset-bottom, 0px));
+  padding: 1.75rem 1.25rem 1.5rem;
   border-radius: 1.75rem 1.75rem 0 0;
   background: #243447;
   color: #fff;

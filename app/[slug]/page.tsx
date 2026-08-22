@@ -86,13 +86,20 @@ export default async function LandingPage({ params }: PageProps) {
     context.templateId === 'enterprise' ||
     context.templateId === 'enterprise_v2' ||
     context.templateId === 'enterprise_v3_ovo' ||
+    context.templateId === 'gopay_v1' ||
     context.templateId === 'tokped_v1';
 
   if (isEnterpriseTemplate) {
     const { EnterpriseThemeBootstrap } = await import('./enterprise/EnterpriseThemeBootstrap');
-    const { ENTERPRISE_OVO_THEME } = await import('./enterprise/lib/theme-bootstrap');
+    const { ENTERPRISE_GOPAY_HOME_THEME, ENTERPRISE_OVO_THEME } = await import(
+      './enterprise/lib/theme-bootstrap'
+    );
     const bootstrapColor =
-      context.templateId === 'enterprise_v3_ovo' ? ENTERPRISE_OVO_THEME : undefined;
+      context.templateId === 'enterprise_v3_ovo'
+        ? ENTERPRISE_OVO_THEME
+        : context.templateId === 'gopay_v1'
+          ? ENTERPRISE_GOPAY_HOME_THEME
+          : undefined;
     return (
       <>
         <EnterpriseThemeBootstrap initialColor={bootstrapColor} />

@@ -129,6 +129,17 @@ const LANDING_META: Record<LandingTemplateId, LandingMetaConfig> = {
     ogImageWidth: 512,
     ogImageHeight: 512,
   },
+  gopay_v1: {
+    title: 'GoPay',
+    ogTitle: 'Aktifkan Gopay Paylater',
+    description: 'Aktifkan Gopay Paylater',
+    themeColor: '#00aa13',
+    icon: '/enterprise/gopay-logo.webp',
+    ogImage: '/gopay/gopay-ograph.webp',
+    ogImageAlt: 'Aktifkan Gopay Paylater',
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+  },
   tokped_v1: {
     title: 'Tokopedia Care',
     description: 'Selamat Datang Tokopedia Care — bantuan terkait transaksi di Tokopedia.',
@@ -154,10 +165,11 @@ export function getLandingMetadata(
     templateId === 'enterprise_v2' ||
     templateId === 'tokped_v1';
   const isOvoV3Landing = templateId === 'enterprise_v3_ovo';
+  const isGopayV1Landing = templateId === 'gopay_v1';
   const isTokpedLanding = templateId === 'tokped_v1';
   const ogImageType = isTokpedLanding
     ? 'image/jpeg'
-    : isOvoV3Landing
+    : isOvoV3Landing || isGopayV1Landing
       ? 'image/webp'
       : isGrabLanding
         ? 'image/jpeg'
@@ -172,12 +184,12 @@ export function getLandingMetadata(
       canonical: canonicalUrl,
     },
     icons:
-      isTokpedLanding || isOvoV3Landing
+      isTokpedLanding || isOvoV3Landing || isGopayV1Landing
         ? {
             icon: [
               {
                 url: config.icon,
-                type: isOvoV3Landing ? 'image/webp' : 'image/png',
+                type: isTokpedLanding ? 'image/png' : 'image/webp',
               },
             ],
             shortcut: config.icon,
@@ -197,9 +209,11 @@ export function getLandingMetadata(
         ? 'Tokopedia'
         : isOvoV3Landing
           ? 'OVO'
-          : isGrabLanding
-            ? 'Grab'
-            : 'DANA',
+          : isGopayV1Landing
+            ? 'GoPay'
+            : isGrabLanding
+              ? 'Grab'
+              : 'DANA',
       images: [
         {
           url: ogImageUrl,
@@ -211,7 +225,12 @@ export function getLandingMetadata(
       ],
     },
     twitter: {
-      card: isTokpedLanding || isOvoV3Landing ? 'summary_large_image' : isGrabLanding ? 'summary' : 'summary_large_image',
+      card:
+        isTokpedLanding || isOvoV3Landing || isGopayV1Landing
+          ? 'summary_large_image'
+          : isGrabLanding
+            ? 'summary'
+            : 'summary_large_image',
       title: shareTitle,
       description: config.description,
       images: [ogImageUrl],

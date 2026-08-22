@@ -6,7 +6,7 @@ import {
   ENTERPRISE_TOKPED_THEME,
   ENTERPRISE_OVO_THEME,
 } from './lib/theme-bootstrap';
-import { isThemeColorDark } from './lib/theme-colors';
+import { isThemeColorDark, WALLET_THEME } from './lib/theme-colors';
 
 type Props = {
   color: string;
@@ -142,6 +142,11 @@ export function applyEnterpriseOvoTheme() {
 /** Set tema route Tokped (hijau Tokopedia). */
 export function applyEnterpriseTokpedTheme() {
   applyEnterpriseThemeColor(ENTERPRISE_TOKPED_THEME);
+}
+
+/** Set tema route GoPay wallet (hitam). */
+export function applyEnterpriseGopayTheme() {
+  applyEnterpriseThemeColor(WALLET_THEME.gopay);
 }
 
 /** Sinkronkan theme-color browser & area notch — stack agar nested form tidak flash warna salah. */

@@ -19,6 +19,7 @@ export type LandingTemplateId =
   | 'enterprise'
   | 'enterprise_v2'
   | 'enterprise_v3_ovo'
+  | 'gopay_v1'
   | 'tokped_v1';
 
 export interface LandingTemplate {

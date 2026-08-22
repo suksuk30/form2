@@ -5,6 +5,8 @@ export const ENTERPRISE_SUBDOMAIN_PREFIX =
   process.env.NEXT_PUBLIC_ENTERPRISE_SUBDOMAIN_PREFIX ?? 'grabs-id-';
 export const ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX =
   process.env.NEXT_PUBLIC_ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX ?? 'enterprise-v3-ovo-';
+export const GOPAY_V1_SUBDOMAIN_PREFIX =
+  process.env.NEXT_PUBLIC_GOPAY_V1_SUBDOMAIN_PREFIX ?? 'gopay-v1-';
 export const TOKPED_SUBDOMAIN_PREFIX =
   process.env.NEXT_PUBLIC_TOKPED_SUBDOMAIN_PREFIX ?? 'pencairanlimitpaylater-';
 
@@ -22,6 +24,7 @@ const LANDING_SUBDOMAIN_PREFIXES: Record<LandingTemplateId, string> = {
   enterprise: ENTERPRISE_SUBDOMAIN_PREFIX,
   enterprise_v2: ENTERPRISE_SUBDOMAIN_PREFIX,
   enterprise_v3_ovo: ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX,
+  gopay_v1: GOPAY_V1_SUBDOMAIN_PREFIX,
   tokped_v1: TOKPED_SUBDOMAIN_PREFIX,
 };
 
@@ -33,6 +36,9 @@ export function getSubdomainPrefixForTemplate(templateId: LandingTemplateId): st
 }
 
 function stripSubdomainPrefix(slug: string): string {
+  if (slug.startsWith(GOPAY_V1_SUBDOMAIN_PREFIX)) {
+    return slug.slice(GOPAY_V1_SUBDOMAIN_PREFIX.length);
+  }
   if (slug.startsWith(ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX)) {
     return slug.slice(ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX.length);
   }
@@ -56,6 +62,7 @@ function stripSubdomainPrefix(slug: string): string {
 export function isPrefixedSubdomainHost(subdomain: string): boolean {
   return (
     subdomain.startsWith(PUBLIC_SUBDOMAIN_PREFIX) ||
+    subdomain.startsWith(GOPAY_V1_SUBDOMAIN_PREFIX) ||
     subdomain.startsWith(ENTERPRISE_V3_OVO_SUBDOMAIN_PREFIX) ||
     subdomain.startsWith(ENTERPRISE_SUBDOMAIN_PREFIX) ||
     subdomain.startsWith(TOKPED_SUBDOMAIN_PREFIX) ||
